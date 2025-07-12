@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topito - Bienvenida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles: Dark Background and Inter Font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212; /* Very dark background */
+            color: #e0e0e0; /* Light text for high contrast */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative; /* Needed for background animations */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            margin: 0;
+        }
+
+        /* Gradient for Logos and Primary Buttons (Green Theme) */
+        .gradient-green {
+            background-image: linear-gradient(to right, #10B981, #059669); /* Emerald Green to Dark Green */
+        }
+        .text-gradient-green {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #10B981, #059669);
+        }
+
+        /* Card Shadows for Depth in Dark Theme */
+        .card-shadow {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Navbar Professional */
+        nav {
+            background-color: #1f1f1f; /* Slightly darker than body */
+            border-bottom: 1px solid #333333;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav .text-2xl {
+            font-size: 1.5rem; /* text-2xl from Tailwind */
+            font-weight: 700; /* font-bold from Tailwind */
+        }
+        nav a {
+            color: #a0a0a0; /* Soft gray for links */
+            font-weight: 500; /* medium from Tailwind */
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+        nav a:hover {
+            color: #10B981; /* Green hover */
+        }
+        nav a.text-red-600 {
+            color: #EF4444; /* text-red-600 from Tailwind */
+        }
+        nav a.text-red-600:hover {
+            color: #B91C1C; /* hover:text-red-800 from Tailwind */
+        }
+        nav .fa-shopping-cart {
+            color: #10B981; /* text-blue-600 (now green) */
+        }
+        nav .cart-count {
+            background-color: #EF4444; /* bg-red-500 */
+        }
+
+        /* Header Welcome Section */
+        header {
+            background-color: #1a1a1a; /* Darker header background */
+            padding: 3rem 1rem; /* More padding */
+            text-align: center;
+            border-bottom: 1px solid #333333;
+        }
+        header h1 {
+            font-size: 2.5rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            color: #f5f5f5; /* text-gray-800 (now light) */
+            background: linear-gradient(to right, #10B981, #059669); /* Green gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* pulse animation */
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .7; }
+        }
+
+        /* Carousel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* shadow-2xl */
+            background-color: #242424; /* bg-white (now dark) */
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 100%;
+            margin-top: -60px; /* Adjusted to fit the carousel correctly */
+        }
+        .carousel-slide {
+            display: none;
+            transition: opacity 1s ease-in-out;
+        }
+        .carousel-slide.active {
+            display: block;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 20rem; /* h-72 */
+            object-fit: cover;
+            object-position: center;
+        }
+        @media (min-width: 768px) {
+            .carousel-slide img {
+                height: 24rem; /* md:h-96 */
+            }
+        }
+        .carousel-nav {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        .carousel-dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 9999px; /* rounded-full */
+            background-color: rgba(255, 255, 255, 0.4); /* Lighter for contrast on dark */
+            cursor: pointer;
+            border: 2px solid white;
+            transition: background-color 0.3s;
+        }
+        .carousel-dot.active {
+            background-color: #10B981; /* Green active dot */
+        }
+
+        /* Product Section */
+        main {
+            flex-grow: 1;
+            padding: 1rem;
+        }
+        main h2 {
+            font-size: 2rem; /* text-3xl */
+            font-weight: 600; /* font-semibold */
+            color: #f5f5f5; /* text-gray-800 (now light) */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .sm\:grid-cols-2 {
+            @media (min-width: 640px) {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        .lg\:grid-cols-3 {
+            @media (min-width: 1024px) {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        .xl\:grid-cols-4 {
+            @media (min-width: 1280px) {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+        .gap-6 { gap: 1.5rem; }
+
+        .product-card {
+            background-color: #242424; /* bg-white (now dark) */
+            border-radius: 1rem; /* rounded-2xl */
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4); /* card-shadow adjusted */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6); /* hover:shadow-xl adjusted */
+        }
+        .product-card img {
+            width: 100%;
+            height: 12rem; /* h-48 */
+            object-fit: cover;
+            object-position: center;
+        }
+        .product-card .p-5 {
+            padding: 1.25rem;
+        }
+        .product-card h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #f5f5f5; /* text-gray-800 (now light) */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .product-card .text-red-500 {
+            color: #EF4444; /* text-red-500 */
+            font-weight: 700; /* font-bold */
+            font-size: 1.125rem; /* text-lg */
+            margin-right: 0.5rem; /* mr-2 */
+        }
+        .product-card .line-through {
+            text-decoration: line-through;
+            color: #a0a0a0; /* text-gray-500 (now light gray) */
+            font-size: 0.875rem; /* text-sm */
+        }
+        .product-card .bg-red-100 {
+            background-color: #3d1c1c; /* Darker red-100 */
+            color: #fca5a5; /* Lighter text for red-800 */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 600; /* font-semibold */
+            padding: 0.125rem 0.625rem; /* px-2.5 py-0.5 */
+            border-radius: 9999px; /* rounded-full */
+        }
+        .product-card p.text-gray-600 {
+            color: #c0c0c0; /* text-gray-600 (now light gray) */
+            font-size: 0.875rem; /* text-sm */
+        }
+        .product-card .inline-block {
+            display: inline-block;
+        }
+        .product-card .bg-blue-500 {
+            background-color: #10B981; /* Blue-500 (now green) */
+            color: white;
+            font-weight: 700; /* font-bold */
+            padding: 0.5rem 1rem; /* py-2 px-4 */
+            border-radius: 0.75rem; /* rounded-xl */
+            transition: all 0.3s ease; /* transition duration-300 ease-in-out */
+            transform: scale(1); /* transform hover:scale-105 */
+        }
+        .product-card .bg-blue-500:hover {
+            background-color: #059669; /* hover:bg-blue-600 (darker green) */
+            transform: scale(1.05); /* hover:scale-105 */
+        }
+
+        /* Modal Details */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            display: none; /* hidden */
+        }
+        .modal.flex {
+            display: flex; /* Show when active */
+        }
+        .modal-content {
+            background-color: #242424; /* bg-white (now dark) */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5); /* shadow-xl adjusted */
+            padding: 1.5rem; /* p-6 */
+            max-width: 28rem; /* max-w-md */
+            width: 90%;
+            position: relative;
+        }
+        .modal-content button {
+            position: absolute;
+            top: 0.5rem; /* top-2 */
+            right: 0.75rem; /* right-3 */
+            color: #a0a0a0; /* text-gray-600 */
+            font-size: 1.125rem; /* text-lg */
+            transition: color 0.3s ease;
+        }
+        .modal-content button:hover {
+            color: #EF4444; /* hover:text-red-500 */
+        }
+        .modal-content img {
+            width: 100%;
+            height: 12rem; /* h-48 */
+            object-fit: cover;
+            border-radius: 0.25rem; /* rounded */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .modal-content h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            color: #f5f5f5; /* text-gray-800 */
+        }
+        .modal-content p {
+            color: #c0c0c0; /* text-gray-700 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .modal-content p strong {
+            color: #e0e0e0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1f1f1f; /* bg-gray-800 (now darker) */
+            color: #e0e0e0; /* white (now light gray) */
+            padding-top: 2.5rem; /* pt-10 */
+            padding-bottom: 1.5rem; /* pb-6 */
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.4); /* Adjusted shadow */
+        }
+        footer .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        footer h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1rem; /* mb-4 */
+            color: #10B981; /* text-red-400 (now green) */
+        }
+        footer p {
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        footer .text-red-400 {
+            color: #10B981; /* text-red-400 (now green) */
+        }
+        footer a {
+            color: #a0a0a0; /* white (now light gray) */
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #059669; /* hover:text-red-400 (darker green) */
+        }
+        footer .flex.space-x-4 a {
+            font-size: 1.5rem; /* text-2xl */
+        }
+        footer .border-t {
+            border-top: 1px solid #333333; /* border-gray-700 */
+            margin-top: 2rem; /* mt-8 */
+            padding-top: 1.5rem; /* pt-6 */
+            text-align: center;
+            font-size: 0.875rem; /* text-sm */
+            color: #a0a0a0; /* text-gray-400 */
+        }
+        footer .bi-heart-fill {
+            color: #EF4444; /* text-red-400 */
+        }
+
+        /* --- Animations for Background and Decorative Elements (Pure CSS) --- */
+
+        /* Stars Background (subtle "space" effect) */
+        .star {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            animation: twinkle 3s linear infinite, fadeOut 3s forwards;
+            z-index: 0; /* Ensure they are in the background */
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+        @keyframes fadeOut {
+            0% { opacity: 0; transform: scale(0.5); }
+            10% { opacity: 0.8; transform: scale(1); }
+            90% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Floating Emojis (add a touch of professional fun) */
+        .floating-emoji {
+            position: fixed;
+            font-size: 2.8em; /* Slightly larger size */
+            opacity: 0.7; /* More subtle */
+            pointer-events: none;
+            animation: floatAndFade 12s ease-out forwards; /* Longer duration for smoothness */
+            z-index: 5; /* Above stars, below main content */
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.4); /* Small shadow for pop */
+        }
+        @keyframes floatAndFade {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(var(--end-x)) rotate(var(--end-rotate)); /* Exit completely out of view */
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<nav class="shadow-md p-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-gradient-green">
+        Topito
+    </div>
+    <div class="flex items-center space-x-4">
+        <a href="/nosotros" class="text-gray-700 hover:text-blue-600 font-medium">Nosotros</a>
+        <a href="/productos" class="text-gray-700 hover:text-blue-600 font-medium">Productos</a>
+        <a href="/logout" class="text-red-600 hover:text-red-800 font-medium">Cerrar Sesión</a>
+        <a href="/carrito" class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span th:if="${carritoCount > 0}" class="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5" th:text="${carritoCount}">0</span>
+        </a>
+    </div>
+</nav>
+
+<header class="py-12 text-center">
+    <h1 class="animate-pulse">
+        <i class="fas fa-home mr-2"></i> ¡Bienvenido a  Topito!
+    </h1>
+</header>
+
+<main class="flex-grow container mx-auto p-4 md:p-8">
+    <section class="mb-12 mt-[-60px]">
+        <div class="carousel-container rounded-2xl overflow-hidden shadow-2xl bg-white mx-auto max-w-5xl relative">
+            <div class="carousel-slide active">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Imagen 2" class="w-full h-72 md:h-96 object-cover object-center">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Imagen 1" class="w-full h-72 md:h-96 object-cover object-center">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Imagen 3" class="w-full h-72 md:h-96 object-cover object-center">
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-dot active" onclick="currentSlide(0)"></button>
+                <button class="carousel-dot" onclick="currentSlide(1)"></button>
+                <button class="carousel-dot" onclick="currentSlide(2)"></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6">Productos en Oferta</h2>
+        <div th:if="${#lists.isEmpty(productosEnOferta)}" class="text-center text-gray-600 text-lg py-5">
+            No hay productos en oferta actualmente.
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div th:each="producto : ${productosEnOferta}" class="product-card">
+                <img th:src="${producto.imagenUrl != null and producto.imagenUrl != '' ? producto.imagenUrl : 'https://placehold.co/400x300/242424/10B981?text=Oferta'}"
+                     alt="Producto en oferta" class="w-full h-48 object-cover object-center">
+                <div class="p-5">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2" th:text="${producto.nombre}">Nombre Producto</h3>
+                    <div class="flex items-baseline mb-3">
+                            <span class="text-red-500 font-bold text-lg mr-2"
+                                  th:text="${#numbers.formatCurrency(producto.precio * (1 - producto.descuento/100))}">$XX.XX</span>
+                        <span class="line-through text-gray-500 text-sm"
+                              th:text="${#numbers.formatCurrency(producto.precio)}">$YY.YY</span>
+                        <span class="ml-2 bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full"
+                              th:text="${#numbers.formatDecimal(producto.descuento, 0, 0) + '% OFF'}">XX% OFF</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">Stock: <span th:text="${producto.stock}"></span></p>
+                    <button
+                            onclick="showProductDetailsModal(this)"
+                            th:data-id="${producto.id}"
+                            th:data-nombre="${producto.nombre}"
+                            th:data-descripcion="${producto.descripcion}"
+                            th:data-categoria="${producto.categoria}"
+                            th:data-genero="${producto.genero}"
+                            th:data-talla="${producto.talla}"
+                            th:data-precio="${producto.precio}"
+                            th:data-descuento="${producto.descuento}"
+                            th:data-stock="${producto.stock}"
+                            th:data-imagenurl="${producto.imagenUrl}"
+                            th:data-tela="${producto.tela}"
+                            class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out transform hover:scale-105">
+                        Ver más detalles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div id="productModal" class="modal">
+    <div class="modal-content rounded-lg shadow-xl p-6 max-w-md w-full relative">
+        <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-600 hover:text-red-500 text-lg">&times;</button>
+        <img id="modalImagen" src="" class="w-full h-48 object-cover rounded mb-4" alt="Producto">
+        <h2 id="modalNombre" class="text-2xl font-bold mb-2"></h2>
+        <p id="modalDescripcion" class="text-gray-700 mb-2"></p>
+        <p><strong>Categoría:</strong> <span id="modalCategoria"></span></p>
+        <p><strong>Género:</strong> <span id="modalGenero"></span></p>
+        <p><strong>Talla:</strong> <span id="modalTalla"></span></p>
+        <p><strong>Precio:</strong> $<span id="modalPrecio"></span></p>
+        <p><strong>Descuento:</strong> <span id="modalDescuento"></span>%</p>
+        <p><strong>Stock:</strong> <span id="modalStock"></span></p>
+        <p><strong>Tela:</strong> <span id="modalTela"></span></p>
+    </div>
+</div>
+
+<footer class="pt-10 pb-6">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Topito   </h3>
+                <p class="mb-2"><i class="bi bi-geo-alt-fill mr-2"></i> Av. Municipalidad #233, Ica</p>
+                <p class="mb-2"><i class="bi bi-telephone-fill mr-2"></i> (056) 123456</p>
+                <p class="mb-2"><i class="bi bi-whatsapp mr-2"></i> +51 987 654 321</p>
+                <p><i class="bi bi-envelope-fill mr-2"></i> contacto@topito.com</p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold mb-4">Horario</h3>
+                <p class="mb-2"><strong>Lunes a Viernes:</strong> 9:00 AM - 8:00 PM</p>
+                <p class="mb-2"><strong>Sábados:</strong> 9:00 AM - 9:00 PM</p>
+                <p><strong>Domingos:</strong> 9:00 AM - 6:00 PM</p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold mb-4">Enlaces</h3>
+                <ul class="space-y-2">
+                    <li><a href="/nosotros" class="hover:text-red-400 transition">Nosotros</a></li>
+                    <li><a href="/productos" class="hover:text-red-400 transition">Productos</a></li>
+                    <li><a href="/contacto" class="hover:text-red-400 transition">Contacto</a></li>
+                    <li><a href="/terminos" class="hover:text-red-400 transition">Términos y condiciones</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold mb-4">Síguenos</h3>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-2xl hover:text-red-400 transition"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-2xl hover:text-red-400 transition"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-red-400 transition"><i class="bi bi-tiktok"></i></a>
+                    <a href="#" class="text-2xl hover:text-red-400 transition"><i class="bi bi-youtube"></i></a>
+                </div>
+                <div class="mt-6">
+                    <h4 class="font-semibold mb-2">Métodos de pago</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <i class="bi bi-credit-card text-2xl"></i>
+                        <i class="bi bi-paypal text-2xl"></i>
+                        <i class="bi bi-cash-coin text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t mt-8 pt-6 text-center text-sm">
+            <p>&copy; 2024 Topito. Todos los derechos reservados.</p>
+            <p class="mt-1">Desarrollado con <i class="bi bi-heart-fill text-red-400"></i> para los clientes </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Carousel functions
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+
+    function showSlides() {
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].classList.add('active');
+        dots[slideIndex-1].classList.add('active');
+        setTimeout(showSlides, 5000); // Change image every 5 seconds
+    }
+
+    function currentSlide(n) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        slideIndex = n + 1;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        if (slideIndex < 1) {slideIndex = slides.length}
+        slides[slideIndex-1].classList.add('active');
+        dots[slideIndex-1].classList.add('active');
+    }
+
+    showSlides(); // Start the carousel
+
+    // Product Details Modal functions
+    function showProductDetailsModal(button) {
+        document.getElementById("modalNombre").textContent = button.dataset.nombre;
+        document.getElementById("modalDescripcion").textContent = button.dataset.descripcion;
+        document.getElementById("modalCategoria").textContent = button.dataset.categoria;
+        document.getElementById("modalGenero").textContent = button.dataset.genero;
+        document.getElementById("modalTalla").textContent = button.dataset.talla;
+        document.getElementById("modalPrecio").textContent = parseFloat(button.dataset.precio).toFixed(2);
+        document.getElementById("modalDescuento").textContent = button.dataset.descuento;
+        document.getElementById("modalStock").textContent = button.dataset.stock;
+        document.getElementById("modalTela").textContent = button.dataset.tela;
+        document.getElementById("modalImagen").src = button.dataset.imagenurl || 'https://placehold.co/400x300/242424/10B981?text=Oferta'; // Fallback for image
+        document.getElementById("productModal").classList.remove("hidden");
+        document.getElementById("productModal").classList.add("flex");
+    }
+
+    function closeModal() {
+        document.getElementById("productModal").classList.add("hidden");
+        document.getElementById("productModal").classList.remove("flex");
+    }
+
+    // --- JavaScript for Background Animations and Emojis ---
+
+    // Function to create twinkling stars
+    function createStar() {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        const size = Math.random() * 3 + 1; /* Random size between 1px and 4px */
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}vw`; /* Random horizontal position */
+        star.style.top = `${Math.random() * 100}vh`; /* Random vertical position */
+        star.style.animationDelay = `${Math.random() * 2}s`; /* Random animation delay */
+        star.style.animationDuration = `${Math.random() * 2 + 2}s`; /* Random animation duration */
+        document.body.appendChild(star);
+
+        // Remove the star after its lifecycle to optimize performance
+        setTimeout(() => {
+            star.remove();
+        }, 5000);
+    }
+
+    // Generate a new star every 150 milliseconds
+    setInterval(createStar, 150);
+
+    // Function to create floating emojis
+    const emojis = ['✨', '💚', '🌟', '🛍️', '💰', '🥳', '✅', '💜', '💙', '🎉']; /* Varied emoji list */
+
+    function createFloatingEmoji() {
+        const emoji = document.createElement('div');
+        emoji.classList.add('floating-emoji');
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)]; /* Random emoji */
+        const startX = Math.random() * 100; /* Random initial X position */
+        emoji.style.left = `${startX}vw`;
+        emoji.style.bottom = `-50px`; /* Start from bottom, out of view */
+        emoji.style.animationDuration = `${Math.random() * 8 + 8}s`; /* Duration from 8 to 16 seconds */
+        emoji.style.animationDelay = `${Math.random() * 5}s`; /* Random delay */
+
+        // CSS variables for the final animation
+        emoji.style.setProperty('--end-x', `${(Math.random() - 0.5) * 50 + startX}vw`); /* Lateral displacement */
+        emoji.style.setProperty('--end-rotate', `${(Math.random() - 0.5) * 720}deg`); /* Random rotation */
+
+        document.body.appendChild(emoji);
+
+        // Remove the emoji after its animation to optimize performance
+        setTimeout(() => {
+            emoji.remove();
+        }, parseFloat(emoji.style.animationDuration) * 1000);
+    }
+
+    // Generate a new floating emoji every 500 milliseconds
+    setInterval(createFloatingEmoji, 500);
+</script>
+</body>
+</html>

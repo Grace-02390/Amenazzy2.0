@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topito - Productos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            margin: 0;
+            /* Fondo con imagen y capa oscura */
+            background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* La imagen se mantiene fija al hacer scroll */
+        }
+
+        /* Capa oscura sobre la imagen de fondo para mejorar la legibilidad */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Ajusta la opacidad para el nivel de oscuridad deseado */
+            z-index: -1; /* Asegura que esté detrás de todo el contenido */
+        }
+
+        .gradient-green {
+            background-image: linear-gradient(to right, #10B981, #059669);
+        }
+        .text-gradient-green {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #10B981, #059669);
+        }
+
+        .card-shadow {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(51, 51, 51, 0.7); /* Borde sutil verde/gris oscuro */
+        }
+        .card-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        nav {
+            background-color: #1f1f1f;
+            border-bottom: 1px solid #333333;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10; /* Asegura que la nav esté sobre el fondo */
+            position: relative;
+        }
+        nav .text-2xl {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        nav a {
+            color: #a0a0a0;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+        nav a:hover {
+            color: #10B981;
+        }
+        nav a.border-b-2 {
+            border-bottom: 2px solid #10B981;
+            color: #10B981;
+        }
+        nav a.text-red-600 {
+            color: #EF4444;
+        }
+        nav a.text-red-600:hover {
+            color: #B91C1C;
+        }
+        nav .fa-shopping-cart {
+            color: #10B981;
+        }
+        nav .cart-count {
+            background-color: #EF4444;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            padding: 0.125rem 0.5rem;
+            line-height: 1;
+            display: inline-block;
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem;
+            position: relative;
+            z-index: 1; /* Asegura que el contenido esté sobre la capa oscura del fondo */
+        }
+        main h2 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #f5f5f5;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-section {
+            background-color: rgba(36, 36, 36, 0.9); /* Ligeramente transparente */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+        .filter-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 1rem;
+        }
+        .filter-section label {
+            color: #e0e0e0;
+        }
+        .filter-section select,
+        .filter-section input[type="text"] {
+            background-color: #333333;
+            border-color: #444444;
+            color: #e0e0e0;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .filter-section select:focus,
+        .filter-section input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5); /* Anillo verde más pronunciado */
+            border-color: #10B981;
+        }
+        /* Estilos específicos para el select, ya que Tailwind puede tener algunos overrides */
+        .filter-section select {
+            -webkit-appearance: none; /* Elimina estilos por defecto en Safari */
+            -moz-appearance: none; /* Elimina estilos por defecto en Firefox */
+            appearance: none; /* Elimina estilos por defecto */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e"); /* Flecha SVG personalizada */
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.25em 1.25em;
+            padding-right: 2.5rem; /* Espacio para la flecha */
+        }
+        .filter-section button,
+        .filter-section a.ml-4 {
+            font-weight: 700;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: scale(1);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Espacio entre icono y texto */
+        }
+        .filter-section button.bg-blue-600 {
+            background: linear-gradient(to right, #10B981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .filter-section button.bg-blue-600:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+        .filter-section a.bg-gray-300 {
+            background-color: #333333;
+            color: #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .filter-section a.bg-gray-300:hover {
+            background-color: #4a4a4a;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-grid-message {
+            color: #c0c0c0;
+            font-size: 1.25rem;
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+        .product-card {
+            background-color: rgba(36, 36, 36, 0.9); /* Ligeramente transparente */
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+        .product-card img {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+            object-position: center;
+        }
+        .product-card .p-5 {
+            padding: 1.25rem;
+        }
+        .product-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 0.5rem;
+        }
+        .product-card p.text-gray-600 {
+            color: #c0c0c0;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+        .product-card .text-red-500 {
+            color: #EF4444;
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-right: 0.5rem;
+        }
+        .product-card .line-through {
+            text-decoration: line-through;
+            color: #a0a0a0;
+            font-size: 0.875rem;
+        }
+        .product-card .text-blue-700 {
+            color: #10B981; /* Precio normal en verde para concordar con la paleta */
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        .product-card .bg-red-100 {
+            background-color: #3d1c1c;
+            color: #fca5a5;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.125rem 0.625rem;
+            border-radius: 9999px;
+        }
+        .product-card p.text-green-600 {
+            color: #34D399;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .product-card p.text-red-600 {
+            color: #EF4444;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .product-card button.bg-green-500 {
+            background-color: #10B981;
+            color: white;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+        .product-card button.bg-green-500:hover {
+            background-color: #059669;
+            transform: scale(1.05);
+        }
+        .product-card button.bg-gray-300 {
+            background-color: #333333;
+            color: #c0c0c0;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .product-card button.bg-blue-500 { /* Botón de Ver más detalles */
+            background-color: #007bff; /* Un azul un poco más oscuro para diferenciar de la barra de navegación */
+            color: white;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+        .product-card button.bg-blue-500:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+
+        #productDetailsModal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #productDetailsModal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        #productDetailsModal > div {
+            background-color: #242424;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5);
+            max-width: 48rem;
+            width: 90%;
+            margin: 0 1rem;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        #productDetailsModal.show > div {
+            transform: translateY(0);
+        }
+
+        #productDetailsModal button.absolute {
+            top: 1rem;
+            right: 1rem;
+            color: #a0a0a0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+        #productDetailsModal button.absolute:hover {
+            color: #e0e0e0;
+        }
+        #productDetailsModal img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            object-fit: cover;
+        }
+        #productDetailsModal h3 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #f5f5f5;
+            margin-bottom: 0.75rem;
+        }
+        #productDetailsModal p {
+            color: #c0c0c0;
+            margin-bottom: 0.5rem;
+        }
+        #productDetailsModal p strong {
+            color: #e0e0e0;
+        }
+        #modal-descripcion {
+            color: #e0e0e0;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        #modal-precio-descuento {
+            color: #EF4444; /* Precio con descuento en rojo */
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        #modal-precio-original {
+            color: #10B981; /* Precio original en verde (cuando no hay descuento o es el precio final) */
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        #modal-precio-original.line-through {
+            text-decoration: line-through;
+            color: #a0a0a0;
+            font-size: 0.875rem;
+        }
+        #modal-descuento-badge {
+            background-color: #3d1c1c;
+            color: #fca5a5;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.125rem 0.625rem;
+            border-radius: 9999px;
+        }
+        #modal-stock {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        #modal-stock.text-green-600 {
+            color: #34D399;
+        }
+        #modal-stock.text-red-600 {
+            color: #EF4444;
+        }
+
+        #messageModal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #messageModal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        #messageModal > div {
+            background-color: #242424;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        #messageModal.show > div {
+            transform: translateY(0);
+        }
+        #messageModal p {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        #messageModal p.text-green-700 {
+            color: #10B981;
+        }
+        #messageModal p.text-red-700 {
+            color: #EF4444;
+        }
+        #messageModal button {
+            background-color: #10B981;
+            color: white;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        #messageModal button:hover {
+            background-color: #059669;
+        }
+
+        footer {
+            background-color: #1f1f1f;
+            color: #a0a0a0;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid #333333;
+            position: relative; /* Para que esté sobre el fondo */
+            z-index: 10;
+        }
+
+        /* Estrellas brillando */
+        .star {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            animation: twinkle 3s linear infinite, fadeOut 3s forwards;
+            z-index: 0; /* Asegura que estén detrás del contenido principal */
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+        @keyframes fadeOut {
+            0% { opacity: 0; transform: scale(0.5); }
+            10% { opacity: 0.8; transform: scale(1); }
+            90% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Emoticonos flotantes */
+        .floating-emoji {
+            position: fixed;
+            font-size: 2.8em;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: floatAndFade 12s ease-out forwards;
+            z-index: 5;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+        }
+        @keyframes floatAndFade {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(var(--end-x)) rotate(var(--end-rotate));
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            nav > div:first-child {
+                margin-bottom: 0.5rem;
+            }
+            nav > div:last-child {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                gap: 0.5rem;
+            }
+            nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.5rem 0;
+            }
+            main h2 {
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
+            }
+            .filter-section form {
+                grid-template-columns: 1fr;
+            }
+            .filter-section .md\:col-span-4 {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+            .filter-section button,
+            .filter-section a.ml-4 {
+                width: 100%;
+            }
+            .filter-section a.ml-4 {
+                margin-left: 0;
+            }
+            .product-card .p-5 {
+                padding: 1rem;
+            }
+            #productDetailsModal > div {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            #productDetailsModal .md\:w-1\/2 {
+                width: 100%;
+            }
+            #productDetailsModal h3 {
+                font-size: 2rem;
+            }
+            #productDetailsModal img {
+                height: 10rem;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<nav class="shadow-md p-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-gradient-green">
+        <a href="/bienvenida">Topito</a>
+    </div>
+    <div class="flex items-center space-x-4">
+        <a href="/bienvenida" class="text-gray-700 hover:text-blue-600 font-medium">Inicio</a>
+        <a href="/nosotros" class="text-gray-700 hover:text-blue-600 font-medium">Nosotros</a>
+        <a href="/productos" class="font-medium border-b-2">Productos</a>
+        <a href="/logout" class="text-red-600 hover:text-red-800 font-medium">Cerrar Sesión</a>
+        <a href="/carrito" class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span th:if="${carritoCount > 0}" class="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5" th:text="${carritoCount}">0</span>
+        </a>
+    </div>
+</nav>
+
+<main class="flex-grow container mx-auto p-4 md:p-8">
+    <h2 class="text-4xl font-extrabold text-gray-800 text-center mb-10">Nuestra Colección ✨</h2>
+
+    <div class="filter-section card-shadow">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">Filtros y Búsqueda 🔎</h3>
+        <form th:action="@{/productos}" method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div>
+                <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Categoría:</label>
+                <select id="categoria" name="categoria" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">Todas</option>
+                    <option th:each="cat : ${categorias}" th:value="${cat}" th:text="${cat}" th:selected="${cat == selectedCategoria}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="genero" class="block text-sm font-medium text-gray-700 mb-1">Género:</label>
+                <select id="genero" name="genero" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">Todos</option>
+                    <option value="hombre" th:selected="${'hombre' == selectedGenero}">Hombre</option>
+                    <option value="mujer" th:selected="${'mujer' == selectedGenero}">Mujer</option>
+                    <option value="niño" th:selected="${'niño' == selectedGenero}">Niño</option>
+                    <option value="niña" th:selected="${'niña' == selectedGenero}">Niña</option>
+                </select>
+            </div>
+            <div>
+                <label for="talla" class="block text-sm font-medium text-gray-700 mb-1">Talla:</label>
+                <select id="talla" name="talla" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">Todas</option>
+                    <option value="S" th:selected="${'S' == selectedTalla}">S</option>
+                    <option value="M" th:selected="${'M' == selectedTalla}">M</option>
+                    <option value="L" th:selected="${'L' == selectedTalla}">L</option>
+                    <option value="XL" th:selected="${'XL' == selectedTalla}">XL</option>
+                </select>
+            </div>
+            <div class="md:col-span-1">
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Buscar:</label>
+                <input type="text" id="search" name="search" th:value="${searchTerm}" placeholder="Buscar por nombre o descripción..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+            </div>
+            <div class="md:col-span-4 flex justify-end gap-4">
+                <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105">
+                    <i class="fas fa-filter mr-2"></i> Aplicar Filtros ✅
+                </button>
+                <a th:href="@{/productos}" class="ml-4 bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105">
+                    <i class="fas fa-times-circle mr-2"></i> Limpiar Filtros ❌
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${#lists.isEmpty(productos)}" class="text-center text-gray-600 text-xl py-10 product-grid-message">
+        No se encontraron productos con los criterios de búsqueda. 😔
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div th:each="producto : ${productos}" class="product-card">
+            <img th:src="${producto.imagenUrl != null and producto.imagenUrl != '' ? producto.imagenUrl : 'https://placehold.co/400x300/242424/10B981?text=Producto'}"
+                 alt="Imagen del producto" class="w-full h-48 object-cover object-center">
+            <div class="p-5">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2" th:text="${producto.nombre}">Nombre del Producto</h3>
+                <p class="text-gray-600 text-sm mb-3" th:text="${producto.categoria} + ' - ' + ${producto.genero} + ' - Talla: ' + ${producto.talla}">Categoría - Género - Talla</p>
+
+                <div class="flex items-baseline mb-3">
+                        <span th:if="${producto.descuento > 0}" class="text-red-500 font-bold text-lg mr-2"
+                              th:text="${'S/.' + #numbers.formatDecimal(producto.precio * (1 - producto.descuento/100), 1, 2)}">S/.XX.XX</span>
+                    <span th:classappend="${producto.descuento > 0 ? 'line-through text-gray-500 text-sm' : 'text-blue-700 font-bold text-xl'}"
+                          th:text="${'S/.' + #numbers.formatDecimal(producto.precio, 1, 2)}">S/.XX.XX</span>
+                    <span th:if="${producto.descuento > 0}" class="ml-2 bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full"
+                          th:text="${#numbers.formatDecimal(producto.descuento, 0, 0) + '% OFF'}">XX% OFF</span>
+                </div>
+
+                <p th:classappend="${producto.stock > 0 ? 'text-green-600' : 'text-red-600'}" class="text-sm font-medium mb-4">
+                    Stock: <span th:text="${producto.stock}"></span>
+                    <span th:if="${producto.stock == 0}" class="ml-1">(Agotado) 📦</span>
+                </p>
+
+                <div class="flex flex-col space-y-3">
+                    <button th:if="${producto.stock > 0}" onclick="addToCart(this)"
+                            th:data-producto-id="${producto.id}"
+                            class="bg-green-500 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out transform hover:scale-105">
+                        Agregar al Carrito 🛒
+                    </button>
+                    <button th:if="${producto.stock == 0}"
+                            class="bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-xl cursor-not-allowed opacity-70" disabled>
+                        Agotado 🚫
+                    </button>
+                    <button onclick="showProductDetailsModal(this)"
+                            th:data-id="${producto.id}"
+                            th:data-nombre="${producto.nombre}"
+                            th:data-descripcion="${producto.descripcion}"
+                            th:data-categoria="${producto.categoria}"
+                            th:data-genero="${producto.genero}"
+                            th:data-talla="${producto.talla}"
+                            th:data-precio="${producto.precio}"
+                            th:data-descuento="${producto.descuento}"
+                            th:data-stock="${producto.stock}"
+                            th:data-imagenurl="${producto.imagenUrl != null ? producto.imagenUrl : ''}"
+                            th:data-tela="${producto.tela}"
+                            class="bg-blue-500 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out transform hover:scale-105">
+                        Ver más detalles 👀
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="productDetailsModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full mx-4 relative">
+        <button onclick="hideProductDetailsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+        <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-1/2">
+                <img id="modal-imagen" src="https://placehold.co/400x300/242424/10B981?text=Producto" alt="Imagen del producto" class="w-full h-auto rounded-lg object-cover">
+            </div>
+            <div class="md:w-1/2">
+                <h3 id="modal-nombre" class="text-3xl font-bold text-gray-800 mb-3">Nombre del Producto</h3>
+                <p class="text-gray-600 mb-2"><strong>Categoría:</strong> <span id="modal-categoria"></span></p>
+                <p class="text-gray-600 mb-2"><strong>Género:</strong> <span id="modal-genero"></span></p>
+                <p class="text-gray-600 mb-2"><strong>Talla:</strong> <span id="modal-talla"></span></p>
+                <p class="text-gray-600 mb-2"><strong>Tela:</strong> <span id="modal-tela"></span></p>
+                <p id="modal-descripcion" class="text-gray-700 text-base mb-4">Descripción detallada del producto.</p>
+
+                <div class="flex items-baseline mb-4">
+                    <span id="modal-precio-descuento" class="text-red-500 font-bold text-2xl mr-2 hidden"></span>
+                    <span id="modal-precio-original" class="text-blue-700 font-bold text-2xl"></span>
+                    <span id="modal-descuento-badge" class="ml-2 bg-red-100 text-red-800 text-sm font-semibold px-2.5 py-0.5 rounded-full hidden"></span>
+                </div>
+
+                <p id="modal-stock" class="text-sm font-medium"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="messageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <p id="messageText" class="text-lg font-semibold mb-4"></p>
+        <button onclick="hideMessageModal()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">Cerrar</button>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Topito. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    function showProductDetailsModal(button) {
+        const modal = document.getElementById('productDetailsModal');
+
+        // Poblar los datos del modal
+        document.getElementById('modal-nombre').innerText = button.dataset.nombre || 'N/A';
+        document.getElementById('modal-descripcion').innerText = button.dataset.descripcion || 'Sin descripción disponible.';
+        document.getElementById('modal-categoria').innerText = button.dataset.categoria || 'N/A';
+        document.getElementById('modal-genero').innerText = button.dataset.genero || 'N/A';
+        document.getElementById('modal-talla').innerText = button.dataset.talla || 'N/A';
+        document.getElementById('modal-tela').innerText = button.dataset.tela || 'N/A';
+
+        const precio = parseFloat(button.dataset.precio);
+        const descuento = parseFloat(button.dataset.descuento);
+        const precioOriginalSpan = document.getElementById('modal-precio-original');
+        const precioDescuentoSpan = document.getElementById('modal-precio-descuento');
+        const descuentoBadge = document.getElementById('modal-descuento-badge');
+
+        // Resetear clases antes de aplicar las nuevas para evitar conflictos
+        precioOriginalSpan.classList.remove('line-through', 'text-gray-500', 'text-sm', 'text-blue-700', 'font-bold', 'text-xl', 'text-2xl');
+        precioDescuentoSpan.classList.add('hidden');
+        descuentoBadge.classList.add('hidden');
+
+        if (descuento > 0) {
+            const precioConDescuento = precio * (1 - descuento / 100);
+            precioDescuentoSpan.innerText = `S/.${precioConDescuento.toFixed(2)}`;
+            precioDescuentoSpan.classList.remove('hidden');
+            precioOriginalSpan.classList.add('line-through', 'text-gray-500', 'text-sm');
+            precioOriginalSpan.innerText = `S/.${precio.toFixed(2)}`;
+            descuentoBadge.innerText = `${descuento.toFixed(0)}% OFF`;
+            descuentoBadge.classList.remove('hidden');
+        } else {
+            precioOriginalSpan.classList.add('text-blue-700', 'font-bold', 'text-2xl'); /* Asegura que el precio original sea grande si no hay descuento */
+            precioOriginalSpan.innerText = `S/.${precio.toFixed(2)}`;
+        }
+
+        const stock = parseInt(button.dataset.stock);
+        const stockElement = document.getElementById('modal-stock');
+        stockElement.innerText = `Stock: ${stock}`;
+        stockElement.classList.remove('text-green-600', 'text-red-600');
+        stockElement.classList.add(stock > 0 ? 'text-green-600' : 'text-red-600');
+        if (stock === 0) {
+            stockElement.innerText += ' (Agotado)';
+        }
+
+        const imagenUrl = button.dataset.imagenurl;
+        document.getElementById('modal-imagen').src = (imagenUrl && imagenUrl !== 'null' && imagenUrl !== '') ? imagenUrl : 'https://placehold.co/400x300/242424/10B981?text=Producto';
+
+        // Mostrar el modal con la clase 'show' para la transición
+        modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.add('show'), 10); // Pequeño delay para permitir que 'hidden' se aplique antes
+    }
+
+    function hideProductDetailsModal() {
+        const modal = document.getElementById('productDetailsModal');
+        modal.classList.remove('show');
+        // Ocultar completamente después de la transición
+        modal.addEventListener('transitionend', function handler() {
+            modal.classList.add('hidden');
+            modal.removeEventListener('transitionend', handler);
+        });
+    }
+
+    // Funcionalidad para cerrar modales al hacer clic fuera
+    window.onclick = function(event) {
+        const productModal = document.getElementById('productDetailsModal');
+        const messageModal = document.getElementById('messageModal');
+        if (event.target == productModal) {
+            hideProductDetailsModal();
+        }
+        if (event.target == messageModal) {
+            hideMessageModal();
+        }
+    }
+
+    function showMessageModal(message, isSuccess = true) {
+        const modal = document.getElementById('messageModal');
+        const messageText = document.getElementById('messageText');
+        messageText.innerText = message;
+        messageText.classList.remove('text-green-700', 'text-red-700');
+        messageText.classList.add(isSuccess ? 'text-green-700' : 'text-red-700');
+
+        modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    function hideMessageModal() {
+        const modal = document.getElementById('messageModal');
+        modal.classList.remove('show');
+        modal.addEventListener('transitionend', function handler() {
+            modal.classList.add('hidden');
+            modal.removeEventListener('transitionend', handler);
+        });
+    }
+
+    async function addToCart(button) {
+        const productoId = button.dataset.productoId;
+        try {
+            const response = await fetch('/carrito/agregar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productoId: productoId, cantidad: 1 })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                showMessageModal(data.message, true);
+                const carritoCountSpan = document.querySelector('nav .fa-shopping-cart + span');
+                if (carritoCountSpan) {
+                    carritoCountSpan.innerText = data.carritoCount;
+                    if (data.carritoCount > 0) {
+                        carritoCountSpan.classList.remove('hidden');
+                    } else {
+                        carritoCountSpan.classList.add('hidden');
+                    }
+                }
+            } else {
+                const errorData = await response.json();
+                showMessageModal(errorData.message || 'Error al agregar producto al carrito.', false);
+            }
+        } catch (error) {
+            console.error('Error al agregar al carrito:', error);
+            showMessageModal('Error de conexión. Inténtalo de nuevo.', false);
+        }
+    }
+
+    // Animación de Estrellas Brillantes
+    function createStar() {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        const size = Math.random() * 3 + 1; // Estrellas de 1 a 4px
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.top = `${Math.random() * 100}vh`; // Aparecen en cualquier parte de la pantalla
+        star.style.animationDelay = `${Math.random() * 2}s`; // Retraso aleatorio para la animación
+        document.body.appendChild(star);
+
+        // Eliminar la estrella después de que termine la animación
+        star.addEventListener('animationend', () => {
+            star.remove();
+        });
+    }
+
+    // Generar estrellas continuamente
+    setInterval(createStar, 300); // Crea una estrella cada 300ms
+
+    // Animación de Emoticonos Flotantes
+    const emojis = ['🌟', '✨', '💎', '💫', '💖', '🛍️', '🎁']; // Más emojis
+    function createFloatingEmoji() {
+        const emoji = document.createElement('div');
+        emoji.classList.add('floating-emoji');
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+        // Posición inicial aleatoria en la parte inferior de la pantalla
+        emoji.style.left = `${Math.random() * 90 + 5}vw`; /* 5-95% del ancho de la pantalla */
+        emoji.style.bottom = `-50px`; /* Empieza justo debajo de la vista */
+
+        // Variables CSS para la animación (destino)
+        emoji.style.setProperty('--end-x', `${(Math.random() * 100 - 50) * 0.5}px`); /* Pequeño desplazamiento horizontal */
+        emoji.style.setProperty('--end-rotate', `${Math.random() * 360 - 180}deg`); /* Rotación aleatoria */
+
+        document.body.appendChild(emoji);
+
+        // Eliminar el emoji después de que termine la animación
+        emoji.addEventListener('animationend', () => {
+            emoji.remove();
+        });
+    }
+
+    // Generar emoticonos cada cierto tiempo
+    setInterval(createFloatingEmoji, 1500); // Crea un emoji cada 1.5 segundos
+</script>
+</body>
+</html>

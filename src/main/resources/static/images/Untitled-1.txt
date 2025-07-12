@@ -1,0 +1,2 @@
+src/main/resources/static/images/chompa1.jpg
+src/main/resources/static/images/camisa1.jpg

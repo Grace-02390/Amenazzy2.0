@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topito Admin - Gestionar Productos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .input-field {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+        }
+        .btn-primary {
+            @apply px-6 py-3 rounded-xl text-white font-semibold shadow-lg transition duration-300 ease-in-out transform hover:scale-105;
+        }
+        .btn-secondary {
+            @apply px-4 py-2 rounded-xl text-blue-700 font-semibold border-2 border-blue-700 hover:bg-blue-50 transition duration-300 ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <nav class="bg-gray-800 shadow-md p-4 flex justify-between items-center text-white">
+        <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+            Topito Admin
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-gray-300">Bienvenido, <span sec:authentication="name" th:text="${nombreAdmin}">Admin</span></span>
+            <a href="/admin/bienvenida" class="text-gray-300 hover:text-white font-medium">Panel Principal</a>
+            <a href="/admin/productos" class="text-white font-medium border-b-2 border-white">Gestionar Productos</a>
+            <a href="/admin/descuentos" class="text-gray-300 hover:text-white font-medium">Descuentos</a>
+            <a href="/admin/usuarios" class="text-gray-300 hover:text-white font-medium">Visualizar Usuarios</a>
+            <a href="/admin/ventas" class="text-gray-300 hover:text-white font-medium">Ventas</a>
+            <a href="/logout" class="text-red-400 hover:text-red-600 font-medium">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-teal-500 to-green-600 py-12 text-center text-white">
+        <h1 class="text-4xl font-extrabold animate-pulse">
+            <i class="fas fa-box-open mr-2"></i> Gestión de Productos
+        </h1>
+        <p class="text-lg mt-2">Administra el inventario de tu tienda</p>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+        <section class="mb-10">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Listado de Productos</h2>
+                <button onclick="openProductModal()" class="btn-primary bg-blue-600 hover:bg-blue-700">
+                    <i class="fas fa-plus-circle mr-2"></i> Añadir Nuevo Producto
+                </button>
+            </div>
+
+            <div th:if="${successMessage}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
+                <span class="block sm:inline" th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
+                <span class="block sm:inline" th:text="${errorMessage}"></span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagen</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Género</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Talla</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descuento</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr th:each="producto : ${productos}">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${producto.id}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <img th:src="${producto.imagenUrl != null and producto.imagenUrl != '' ? producto.imagenUrl : 'https://placehold.co/50x50/E0E0E0/6A11CB?text=NoImg'}"
+                                     alt="Imagen" class="w-12 h-12 object-cover rounded-md">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${producto.nombre}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${producto.categoria}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${producto.genero}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${producto.talla}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${#numbers.formatCurrency(producto.precio)}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${#numbers.formatDecimal(producto.descuento, 0, 0) + '%'}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm" th:classappend="${producto.stock > 0 ? 'text-green-600' : 'text-red-600'}" th:text="${producto.stock}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button onclick="editProduct(this)"
+                                        th:data-id="${producto.id}"
+                                        th:data-nombre="${producto.nombre}"
+                                        th:data-descripcion="${producto.descripcion}"
+                                        th:data-categoria="${producto.categoria}"
+                                        th:data-genero="${producto.genero}"
+                                        th:data-talla="${producto.talla}"
+                                        th:data-precio="${producto.precio}"
+                                        th:data-descuento="${producto.descuento}"
+                                        th:data-stock="${producto.stock}"
+                                        th:data-imagenurl="${producto.imagenUrl}"
+                                        th:data-tela="${producto.tela}"
+                                        th:data-disponible="${producto.disponible}"
+                                        th:data-promocion="${producto.promocion}"
+                                        class="text-indigo-600 hover:text-indigo-900 mr-4">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="deleteProduct([[${producto.id}]])" class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="productModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full mx-4 relative">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            <h3 id="modalTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">Añadir Nuevo Producto</h3>
+
+            <form id="productForm" onsubmit="submitProductForm(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" id="productId" name="id">
+
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required class="input-field">
+                </div>
+                <div>
+                    <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Categoría:</label>
+                    <input type="text" id="categoria" name="categoria" required class="input-field">
+                </div>
+                <div>
+                    <label for="genero" class="block text-sm font-medium text-gray-700 mb-1">Género:</label>
+                    <select id="genero" name="genero" required class="input-field">
+                        <option value="">Seleccione</option>
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                        <option value="niño">Niño</option>
+                        <option value="niña">Niña</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="talla" class="block text-sm font-medium text-gray-700 mb-1">Talla:</label>
+                    <select id="talla" name="talla" required class="input-field">
+                        <option value="">Seleccione</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="precio" class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
+                    <input type="number" id="precio" name="precio" step="0.01" min="0" required class="input-field">
+                </div>
+                <div>
+                    <label for="descuento" class="block text-sm font-medium text-gray-700 mb-1">Descuento (%):</label>
+                    <input type="number" id="descuento" name="descuento" step="0.01" min="0" max="100" value="0" class="input-field">
+                </div>
+                <div>
+                    <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock:</label>
+                    <input type="number" id="stock" name="stock" min="0" required class="input-field">
+                </div>
+                <div>
+                    <label for="tela" class="block text-sm font-medium text-gray-700 mb-1">Tela:</label>
+                    <input type="text" id="tela" name="tela" class="input-field">
+                </div>
+                <div class="md:col-span-2">
+                    <label for="descripcion" class="block text-sm font-medium text-gray-700 mb-1">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" rows="3" class="input-field"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="imagenUrl" class="block text-sm font-medium text-gray-700 mb-1">URL de Imagen:</label>
+                    <input type="text" id="imagenUrl" name="imagenUrl" class="input-field" placeholder="https://ejemplo.com/imagen.jpg" oninput="previewImage()">
+                    <div class="mt-2 text-center">
+                        <img id="imagePreview" src="https://placehold.co/150x150/E0E0E0/6A11CB?text=Vista+Previa" alt="Vista Previa de Imagen" class="max-w-[150px] max-h-[150px] mx-auto rounded-lg border border-gray-300">
+                    </div>
+                </div>
+                <div class="md:col-span-2 flex items-center space-x-4 mt-2">
+                    <label class="flex items-center text-gray-700">
+                        <input type="checkbox" id="disponible" name="disponible" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                        <span class="ml-2">Disponible</span>
+                    </label>
+                    <label class="flex items-center text-gray-700">
+                        <input type="checkbox" id="promocion" name="promocion" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                        <span class="ml-2">En Promoción</span>
+                    </label>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end mt-6">
+                    <button type="button" onclick="closeProductModal()" class="btn-secondary mr-4">Cancelar</button>
+                    <button type="submit" class="btn-primary bg-green-600 hover:bg-green-700">
+                        <i class="fas fa-save mr-2"></i> Guardar Producto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="messageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <p id="messageText" class="text-lg font-semibold mb-4"></p>
+            <button onclick="hideMessageModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Cerrar</button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
+        <p>&copy; 2024 Topito. Todos los derechos reservados.</p>
+    </footer>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // Funciones para el modal de mensajes (reutilizadas)
+        function showMessageModal(message, isSuccess = true) {
+            const modal = document.getElementById('messageModal');
+            const messageText = document.getElementById('messageText');
+            messageText.innerText = message;
+            messageText.classList.remove('text-green-700', 'text-red-700');
+            messageText.classList.add(isSuccess ? 'text-green-700' : 'text-red-700');
+            modal.classList.remove('hidden');
+        }
+
+        function hideMessageModal() {
+            document.getElementById('messageModal').classList.add('hidden');
+        }
+
+        // Cierra el modal de mensajes si se hace clic fuera de él
+        window.onclick = function(event) {
+            const messageModal = document.getElementById('messageModal');
+            const productModal = document.getElementById('productModal');
+            if (event.target == messageModal) {
+                hideMessageModal();
+            }
+            if (event.target == productModal) {
+                closeProductModal();
+            }
+        }
+
+        // Función para previsualizar la imagen
+        function previewImage() {
+            const imageUrl = document.getElementById('imagenUrl').value;
+            const imagePreview = document.getElementById('imagePreview');
+            if (imageUrl) {
+                imagePreview.src = imageUrl;
+            } else {
+                imagePreview.src = 'https://placehold.co/150x150/E0E0E0/6A11CB?text=Vista+Previa';
+            }
+        }
+
+        // Abrir el modal para añadir un producto
+        function openProductModal() {
+            document.getElementById('modalTitle').innerText = 'Añadir Nuevo Producto';
+            document.getElementById('productForm').reset(); // Limpiar el formulario
+            document.getElementById('productId').value = ''; // Asegurar que el ID esté vacío para añadir
+            document.getElementById('disponible').checked = true; // Por defecto disponible
+            document.getElementById('promocion').checked = false; // Por defecto sin promoción
+            previewImage(); // Restablecer la vista previa de la imagen
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        // Abrir el modal para editar un producto
+        function editProduct(button) {
+            document.getElementById('modalTitle').innerText = 'Editar Producto';
+            document.getElementById('productId').value = button.dataset.id;
+            document.getElementById('nombre').value = button.dataset.nombre;
+            document.getElementById('descripcion').value = button.dataset.descripcion;
+            document.getElementById('categoria').value = button.dataset.categoria;
+            document.getElementById('genero').value = button.dataset.genero;
+            document.getElementById('talla').value = button.dataset.talla;
+            document.getElementById('precio').value = button.dataset.precio;
+            document.getElementById('descuento').value = button.dataset.descuento;
+            document.getElementById('stock').value = button.dataset.stock;
+            document.getElementById('imagenUrl').value = button.dataset.imagenurl;
+            document.getElementById('tela').value = button.dataset.tela;
+            document.getElementById('disponible').checked = (button.dataset.disponible === 'true');
+            document.getElementById('promocion').checked = (button.dataset.promocion === 'true');
+            previewImage(); // Actualizar la vista previa de la imagen
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        // Cerrar el modal
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        // Enviar el formulario de producto (Añadir/Editar)
+        async function submitProductForm(event) {
+            event.preventDefault(); // Evitar el envío normal del formulario
+
+            const form = document.getElementById('productForm');
+            const formData = new FormData(form);
+            const productData = {};
+            for (let [key, value] of formData.entries()) {
+                // Convertir valores numéricos y booleanos
+                if (['id', 'precio', 'descuento', 'stock'].includes(key)) {
+                    productData[key] = parseFloat(value);
+                } else if (['disponible', 'promocion'].includes(key)) {
+                    productData[key] = (value === 'on'); // Checkbox value is 'on' if checked
+                } else {
+                    productData[key] = value;
+                }
+            }
+
+            // Asegurar que los booleanos se envíen correctamente si no están marcados
+            if (!formData.has('disponible')) productData.disponible = false;
+            if (!formData.has('promocion')) productData.promocion = false;
+
+            // Ajustar el tipo de género y talla a mayúsculas o minúsculas según tu Enum en Java
+            if (productData.genero) productData.genero = productData.genero.toLowerCase();
+            if (productData.talla) productData.talla = productData.talla.toUpperCase();
+
+            const isEdit = productData.id && productData.id !== 0; // Si hay ID, es edición
+
+            try {
+                const response = await fetch('/admin/productos/guardar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessageModal(result.message, true);
+                    closeProductModal();
+                    // Recargar la página para ver los cambios
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showMessageModal(result.message || 'Error al guardar el producto.', false);
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario del producto:', error);
+                showMessageModal('Error de conexión. Inténtalo de nuevo.', false);
+            }
+        }
+
+        // Eliminar un producto
+        async function deleteProduct(productId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este producto? Esta acción es irreversible.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/productos/eliminar/' + productId, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessageModal(result.message, true);
+                    // Recargar la página para ver los cambios
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showMessageModal(result.message || 'Error al eliminar el producto.', false);
+                }
+            } catch (error) {
+                console.error('Error al eliminar el producto:', error);
+                showMessageModal('Error de conexión. Inténtalo de nuevo.', false);
+            }
+        }
+        /*]]>*/
+    </script>
+</body>
+</html>
