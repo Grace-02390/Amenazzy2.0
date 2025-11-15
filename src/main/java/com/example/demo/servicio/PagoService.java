@@ -43,4 +43,34 @@ public interface PagoService {
      * @return Una lista de todos los objetos Pago.
      */
     List<Pago> findAllPagos();
+    
+    /**
+     * Obtiene pagos por estado.
+     * @param estado El estado de los pagos a buscar.
+     * @return Una lista de pagos con el estado especificado.
+     */
+    List<Pago> findPagosByEstado(Pago.EstadoPago estado);
+    
+    /**
+     * Obtiene pagos por usuario y estado.
+     * @param usuario El usuario.
+     * @param estado El estado de los pagos a buscar.
+     * @return Una lista de pagos del usuario con el estado especificado.
+     */
+    List<Pago> findPagosByUsuarioAndEstado(Usuario usuario, Pago.EstadoPago estado);
+    
+    /**
+     * Cambia el estado de un pago.
+     * @param pagoId El ID del pago.
+     * @param nuevoEstado El nuevo estado.
+     * @return El pago actualizado.
+     */
+    Pago cambiarEstadoPago(Long pagoId, Pago.EstadoPago nuevoEstado);
+    
+    /**
+     * Busca un pago por número de boleta.
+     * @param numeroBoleta El número de boleta.
+     * @return Un Optional que contiene el pago si se encuentra.
+     */
+    Optional<Pago> findPagoByNumeroBoleta(String numeroBoleta);
 }

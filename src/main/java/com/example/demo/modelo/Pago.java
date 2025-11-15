@@ -54,7 +54,7 @@ public class Pago {
     // Constructores
     public Pago() {
         this.fechaVenta = LocalDateTime.now();
-        this.estado = EstadoPago.completado; // Por defecto al crear un pago exitoso
+        this.estado = EstadoPago.pendiente; // Por defecto al crear un pago en estado pendiente
     }
 
     public Pago(Usuario usuario, BigDecimal montoPagado, MetodoPago metodoPago, String numeroBoleta, List<DetalleVenta> detallesVenta) {
@@ -63,7 +63,7 @@ public class Pago {
         this.metodoPago = metodoPago;
         this.fechaVenta = LocalDateTime.now();
         this.numeroBoleta = numeroBoleta;
-        this.estado = EstadoPago.completado;
+        this.estado = EstadoPago.pendiente;
         this.detallesVenta = detallesVenta;
     }
 

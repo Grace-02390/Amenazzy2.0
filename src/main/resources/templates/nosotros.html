@@ -5,157 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Topito - Nosotros</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/x-icon" href="./imgs/favico.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #121212;
+            background-color: #e0e0e0; 
             color: #e0e0e0;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             position: relative;
-            overflow-x: hidden;
+            overflow-x: hidden; 
             margin: 0;
         }
 
-        .gradient-green {
-            background-image: linear-gradient(to right, #10B981, #059669);
-        }
-        .text-gradient-green {
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            background-image: linear-gradient(to right, #10B981, #059669);
-        }
-
-        .card-shadow {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-shadow:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
-        }
-
-        nav {
-            background-color: #1f1f1f;
-            border-bottom: 1px solid #333333;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav .text-2xl {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        nav a {
-            color: #a0a0a0;
-            font-weight: 500;
-            text-decoration: none;
-            transition: color 0.3s ease-in-out;
-        }
-        nav a:hover {
-            color: #10B981;
-        }
-        nav a.border-b-2 {
-            border-bottom: 2px solid #10B981;
-            color: #10B981;
-        }
-        nav a.text-red-600 {
-            color: #EF4444;
-        }
-        nav a.text-red-600:hover {
-            color: #B91C1C;
-        }
-        nav .fa-shopping-cart {
-            color: #10B981;
-        }
-        nav .cart-count {
-            background-color: #EF4444;
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 9999px;
-            padding: 0.125rem 0.5rem;
-            line-height: 1;
-            display: inline-block;
-        }
-
-        main {
-            flex-grow: 1;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 1rem;
-        }
-
-        .section-card {
-            background-color: #242424;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
-            margin-bottom: 2.5rem;
-        }
-        .section-card h2 {
-            font-size: 2.25rem;
-            font-weight: 800;
-            color: #f5f5f5;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .section-card p {
-            color: #c0c0c0;
-            line-height: 1.7;
-        }
-        .section-card .value-card {
-            background-color: #333333;
-            color: #e0e0e0;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .section-card .value-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
-        }
-        .section-card .value-card i {
-            color: #10B981;
-            font-size: 2.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .section-card .value-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #f5f5f5;
-            margin-bottom: 0.5rem;
-        }
-        .section-card .value-card p {
-            font-size: 0.875rem;
-            color: #c0c0c0;
-        }
-
-        .contact-links a {
-            color: #10B981;
-            transition: color 0.3s ease;
-        }
-        .contact-links a:hover {
-            color: #34D399;
-        }
-
-        footer {
-            background-color: #1f1f1f;
-            color: #a0a0a0;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            border-top: 1px solid #333333;
-        }
 
         @media (max-width: 768px) {
             nav {
@@ -190,87 +61,221 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-
-<nav class="shadow-md p-4 flex justify-between items-center">
-    <div class="text-2xl font-bold text-gradient-green">
-        <a href="/bienvenida">Topito</a>
-    </div>
-    <div class="flex items-center space-x-4">
-        <a href="/bienvenida" class="text-gray-700 hover:text-blue-600 font-medium">Inicio</a>
-        <a href="/nosotros" class="font-medium border-b-2">Nosotros</a>
-        <a href="/productos" class="text-gray-700 hover:text-blue-600 font-medium">Productos</a>
-        <a href="/logout" class="text-red-600 hover:text-red-800 font-medium">Cerrar Sesión</a>
-        <a href="/carrito" class="relative">
-            <i class="fas fa-shopping-cart text-xl"></i>
-            <span th:if="${carritoCount > 0}" class="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5" th:text="${carritoCount}">0</span>
-        </a>
-    </div>
-</nav>
-
-<header class="gradient-green py-12 text-center text-white">
-    <h1 class="text-4xl font-extrabold animate-pulse">
-        <i class="fas fa-info-circle mr-2"></i> Sobre Nosotros
-    </h1>
-    <p class="text-lg mt-2">Conoce más sobre Topitp</p>
-</header>
-
-<main class="flex-grow container mx-auto p-4 md:p-8">
-    <section class="section-card">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Nuestra Historia</h2>
-        <p class="leading-relaxed mb-4">
-            En Topito, creemos que la moda debe ser accesible, cómoda y reflejar la personalidad de cada individuo. Fundada en [Año de Fundación], nuestra misión ha sido ofrecer ropa de alta calidad con diseños innovadores que se adapten a todos los estilos de vida. Desde nuestros humildes comienzos, hemos crecido gracias a la pasión por lo que hacemos y el compromiso con nuestros clientes.
-        </p>
-        <p class="leading-relaxed mb-4">
-            Nos especializamos en una amplia gama de prendas, desde polos casuales hasta casacas elegantes, siempre pensando en la diversidad de géneros y tallas. Cada pieza es cuidadosamente seleccionada por su tela, durabilidad y, por supuesto, su estilo.
-        </p>
-        <p class="leading-relaxed">
-            Nuestro equipo está formado por entusiastas de la moda dedicados a brindarte la mejor experiencia de compra. Estamos en constante evolución, buscando las últimas tendencias y las mejores prácticas para asegurar que siempre encuentres algo que te encante en Plaza China.
-        </p>
-    </section>
-
-    <section class="section-card">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Nuestros Valores</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div class="value-card">
-                <i class="fas fa-gem mb-3"></i>
-                <h3 class="font-bold text-xl mb-2">Calidad</h3>
-                <p>Ofrecemos productos duraderos y bien hechos.</p>
+    <header>
+        <div class="w-full max-w-7xl mx-auto py-3">
+            <div class="flex justify-between gap-8 items-center">
+            <div>
+                <a href="/bienvenida">
+                <img src="https://cdn.brandfetch.io/idQpqgVquN/w/122/h/47/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B" 
+                    alt="Topitop logo" 
+                    class="h-8 hover:opacity-90 transition duration-300" />
+                </a>
             </div>
-            <div class="value-card">
-                <i class="fas fa-lightbulb mb-3"></i>
-                <h3 class="font-bold text-xl mb-2">Innovación</h3>
-                <p>Siempre a la vanguardia de las tendencias.</p>
+
+            <div class="flex items-center gap-8">
+                <nav class="hidden lg:flex gap-8 text-black text-base">
+                <a href="/bienvenida" class="hover:underline text-black">Inicio</a>
+                <a href="/nosotros" class="hover:underline text-black">Nosotros</a>
+                <a href="/productos" class="hover:underline text-black">Productos</a>
+                </nav>
+
+                <span class="hidden lg:block text-black">|</span>
+
+                <div class="flex gap-4 items-center relative">
+                <a href="/carrito" class="relative" title="Ver Carrito">
+                    <i class="flex items-center justify-center bg-black text-white rounded-full w-[35px] h-[35px] bi bi-bag"></i>
+                    <span th:if="${carritoCount > 0}"
+                        th:text="${carritoCount}"
+                        class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                    </span>
+                </a>
+                <a href="/logout" title="Cerrar Sesión"
+                    class="flex items-center justify-center w-[35px] h-[35px] bg-red-700 hover:bg-red-800 text-white rounded-full transition duration-200">
+                    <i class="bi bi-box-arrow-right text-lg"></i>
+                </a>
+                </div>
             </div>
-            <div class="value-card">
-                <i class="fas fa-heart mb-3"></i>
-                <h3 class="font-bold text-xl mb-2">Pasión</h3>
-                <p>Amamos lo que hacemos y se nota en cada prenda.</p>
             </div>
         </div>
-    </section>
+    </header>
 
-    <section class="section-card">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Contáctanos</h2>
-        <p class="leading-relaxed text-center">
-            ¿Tienes alguna pregunta o sugerencia? ¡Nos encantaría escucharte!
-        </p>
-        <div class="flex justify-center space-x-6 mt-6 contact-links">
-            <a href="mailto:info@plazachina.com" class="text-4xl transition-colors duration-200">
-                <i class="fas fa-envelope"></i>
-            </a>
-            <a href="#" class="text-4xl transition-colors duration-200">
-                <i class="fab fa-facebook"></i>
-            </a>
-            <a href="#" class="text-4xl transition-colors duration-200">
-                <i class="fab fa-instagram"></i>
-            </a>
+    <header class="bg-gradient-to-r from-red-600 to-red-800 text-white py-20">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6">Sobre Topitop</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto text-white/90">
+            Entre hilos y telas tejemos sueños, porque cada prenda bien hecha no solo viste el cuerpo, sino también la confianza y el alma.
+            </p>
         </div>
-    </section>
-</main>
+    </header>
 
-<footer class="text-white text-center p-4 mt-8">
-    <p>&copy; 2024 Topito. Todos los derechos reservados.</p>
-</footer>
+    <main class="max-w-7xl mx-auto px-6 py-20 space-y-20">
+        <section class="flex flex-col md:flex-row gap-12 items-center">
+            <div class="md:w-1/2">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Nuestra Historia</h2>
+            <p class="text-gray-700 mb-4">
+                Topitop es una marca peruana de moda con más de 40 años de historia, nacida del esfuerzo emprendedor de la familia Flores. Fundada en 1983, evolucionó de un pequeño taller textil a convertirse en una de las principales cadenas de ropa del país, con presencia nacional ubicada en la región de Ica.
+                Con una sólida infraestructura de producción, exportamos prendas a mercados como Estados Unidos y Europa, y mantenemos un compromiso firme con la calidad, la innovación y el desarrollo sostenible. Hoy, combinamos nuestra red de tiendas físicas con una potente plataforma digital, llevando moda accesible y actual a miles de peruanos.
+            </p>
+            </div>
+            <div class="md:w-1/2">
+            <img src="https://elcomercio-gestion-prod.web.arc-cdn.net/resizer/v2/Z7C2JGIQ3VDH3MIXL72DPIW2XQ.jpg?auth=0c9f9477f79a38f951f6bd195ff60998535925ffa4a017675dbb46b837042fc6&width=1200&height=781&smart=true&quality=75" 
+                alt="AI Neural Network Visualization" 
+                class="rounded-2xl shadow-xl w-full">
+            </div>
+        </section>
 
+        <section class="bg-white/90 border border-gray-300 rounded-3xl p-12 shadow-xl">
+            <div class="text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Nuestra Misión</h2>
+            <p class="text-xl text-gray-700 mb-8">
+                Ofrecer moda de calidad y accesible, impulsando el talento peruano y el desarrollo sostenible.
+            </p>
+            <div class="flex flex-wrap justify-center gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md w-full sm:w-64">
+                <div class="text-red-600 mb-4">
+                    <i class="fas fa-tshirt text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2">Moda para todos</h3>
+                <p class="text-gray-600">Diseñamos y vendemos ropa moderna, cómoda y accesible.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md w-full sm:w-64">
+                <div class="text-red-600 mb-4">
+                    <i class="fas fa-users text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2">Talento local</h3>
+                <p class="text-gray-600">Apostamos por la industria textil peruana y su gente.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md w-full sm:w-64">
+                <div class="text-red-600 mb-4">
+                    <i class="fas fa-recycle text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2">Compromiso sostenible</h3>
+                <p class="text-gray-600">Actuamos con responsabilidad social y ambiental.</p>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <section class="bg-white/90 border border-gray-300 rounded-3xl p-12 shadow-xl">
+        <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Nuestra Visión</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 text-center">
+            <div class="text-red-600 mb-4">
+                <i class="fas fa-tshirt text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-2">Moda Accesible</h3>
+            <p class="text-gray-600">Queremos que cada persona, en cualquier rincón del país, pueda vestir con estilo, calidad y a un precio justo.</p>
+            </div>
+ 
+            <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 text-center">
+            <div class="text-red-600 mb-4">
+                <i class="fas fa-users text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-2">Personas Primero</h3>
+            <p class="text-gray-600">Creemos en el poder del trabajo peruano. Nuestra visión se basa en empoderar a nuestra gente y sus talentos.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 text-center">
+            <div class="text-red-600 mb-4">
+                <i class="fas fa-leaf text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-2">Compromiso Sostenible</h3>
+            <p class="text-gray-600">Soñamos con un futuro donde la moda respete el medio ambiente y cree valor con responsabilidad social.</p>
+            </div>
+
+        </div>
+        </section>
+
+        <section class="bg-white/90 border border-gray-300 rounded-3xl p-12 shadow-xl">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 items-center">
+            <div class="space-y-6">
+            <img src="https://images.unsplash.com/photo-1542068829-1115f7259450?auto=format&fit=crop&w=700&q=80" alt="Contact clothing"
+                class="rounded-xl shadow-md">
+        </div>
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Déjanos un mensaje</h2>
+            <form id="contactForm" class="space-y-5">
+                <input type="text" name="name" placeholder="Nombre" required
+                class="w-full border border-black px-4 py-3 rounded-md text-gray-700">
+                <input type="email" name="email" placeholder="Email" required
+                class="w-full border border-black px-4 py-3 rounded-md text-gray-700">
+                <input type="tel" name="phone" placeholder="Telefono"
+                class="w-full border border-black px-4 py-3 rounded-md text-gray-700">
+                <textarea name="message" rows="5" placeholder="Mensaje" required
+                class="w-full border border-black px-4 py-3 rounded-md text-gray-700"></textarea>
+
+                <button type="submit"
+                class="w-full bg-black text-white font-semibold py-3 rounded-full hover:bg-gray-800 transition">
+                Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+
+        <!-- Modal -->
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-8 rounded-xl text-center shadow-lg w-80">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Mensaje enviado</h3>
+            <p class="text-gray-600 mb-6">Gracias por contactarnos. Te responderemos pronto.</p>
+            <button onclick="closeModal()"
+                class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">Cerrar</button>
+            </div>
+        </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 text-gray-700 text-sm mt-16">
+    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Topitop</h5>
+        <p class="text-sm leading-relaxed">Ropa de moda para toda la familia con estilo, comodidad y calidad.</p>
+        </div>
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Enlaces útiles</h5>
+        <ul class="space-y-2">
+            <li><a href="/" class="hover:underline">Inicio</a></li>
+            <li><a href="/productos-publicos" class="hover:underline">Productos</a></li>
+            <li><a href="/login" class="hover:underline">Iniciar sesión</a></li>
+            <li><a href="/registro" class="hover:underline">Registrarse</a></li>
+        </ul>
+        </div>
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Contáctanos</h5>
+        <ul class="space-y-2">
+            <li>📍 Av. Cutervo 123, Ica, Perú</li>
+            <li>📞 +51 987 654 321</li>
+            <li>✉️ soporte_ica@topitop.com</li>
+        </ul>
+        </div>
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Síguenos</h5>
+        <div class="flex space-x-4">
+            <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+        </div>
+        </div>
+    </div>
+
+    <div class="text-center text-gray-500 text-xs py-4 border-t border-gray-200">
+        © 2025 Topitop. Todos los derechos reservados.
+    </div>
+    </footer>
+
+    <script>
+    const form = document.getElementById('contactForm');
+    const modal = document.getElementById('modal');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Evita que se recargue
+        form.reset();       // Limpia el formulario
+        modal.classList.remove('hidden'); // Muestra modal
+    });
+
+    function closeModal() {
+        modal.classList.add('hidden'); // Oculta modal
+    }
+    </script>
 </body>
 </html>

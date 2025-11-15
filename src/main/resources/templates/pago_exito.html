@@ -5,65 +5,242 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Topito - Pago Exitoso</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/x-icon" href="./imgs/favico.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-        }
-        .gradient-header {
-            background: linear-gradient(90deg, #232526 0%, #414345 100%);
-        }
-        .gradient-btn {
-            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
-        }
-        .card-shadow {
-            box-shadow: 0 6px 24px 0 rgba(0,0,0,0.15);
+            background-color: #e0e0e0; 
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden; 
+            margin: 0;
         }
     </style>
 </head>
-<body class="bg-[#181a1b] flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen">
 
-    <nav class="gradient-header shadow-md p-4 flex justify-between items-center">
-        <div class="text-2xl font-extrabold text-green-400 tracking-wide">
-            <a href="/bienvenida">Topito</a>
-        </div>
-        <div class="flex items-center space-x-6">
-            <a href="/nosotros" class="text-gray-200 hover:text-green-400 font-medium transition">Nosotros</a>
-            <a href="/productos" class="text-gray-200 hover:text-green-400 font-medium transition">Productos</a>
-            <a href="/logout" class="text-red-400 hover:text-red-600 font-medium transition">Cerrar Sesión</a>
-            <a href="/carrito" class="relative">
-                <i class="fas fa-shopping-cart text-xl text-gray-200 hover:text-green-400"></i>
-                <span th:if="${carritoCount > 0}" class="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5" th:text="${carritoCount}">0</span>
-            </a>
-        </div>
-    </nav>
+    <header>
+        <div class="w-full max-w-7xl mx-auto py-3">
+            <div class="flex justify-between gap-8 items-center">
+            <div>
+                <a href="/bienvenida">
+                <img src="https://cdn.brandfetch.io/idQpqgVquN/w/122/h/47/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B" 
+                    alt="Topitop logo" 
+                    class="h-8 hover:opacity-90 transition duration-300" />
+                </a>
+            </div>
+            
+            <div class="flex items-center gap-8">
+                <nav class="hidden lg:flex gap-8 text-black text-base">
+                <a href="/bienvenida" class="hover:underline text-black">Inicio</a>
+                <a href="/nosotros" class="hover:underline text-black">Nosotros</a>
+                <a href="/productos" class="hover:underline text-black">Productos</a>
+                </nav>
 
-    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
-        <div class="bg-[#232526] p-8 md:p-12 rounded-2xl card-shadow text-center max-w-md w-full">
-            <div class="text-green-400 text-6xl mb-6">
+                <span class="hidden lg:block text-black">|</span>
+
+                <div class="flex gap-4 items-center relative">
+                <a href="/carrito" class="relative" title="Ver Carrito">
+                    <i class="flex items-center justify-center bg-black text-white rounded-full w-[35px] h-[35px] bi bi-bag"></i>
+                    <span th:if="${carritoCount > 0}"
+                        th:text="${carritoCount}"
+                        class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                    </span>
+                </a>
+                <div class="relative">
+                    <button id="userDropdown" class="flex items-center justify-center w-[35px] h-[35px] bg-blue-600 hover:bg-blue-700 text-white rounded-full transition duration-200" title="Menú de Usuario">
+                        <i class="bi bi-person text-lg"></i>
+                    </button>
+                    <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                        <a href="/cliente/historial-boletas" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            📋 Historial de Boletas
+                        </a>
+                        <hr class="my-1">
+                        <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            🚪 Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mt-6 flex items-center justify-center px-4">
+        <div class="bg-white/90 border border-gray-300 md:p-12 rounded-3xl shadow-2xl text-center max-w-md w-full animate-fade-in-up">
+            
+            <!-- Estado Pendiente -->
+            <div th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).pendiente}" class="text-yellow-500 text-6xl mb-6">
+                <i class="fas fa-clock animate-pulse"></i>
+            </div>
+            
+            <!-- Estado Completado -->
+            <div th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).completado}" class="text-green-500 text-6xl mb-6">
                 <i class="fas fa-check-circle animate-bounce"></i>
             </div>
-            <h2 class="text-4xl font-extrabold text-white mb-4">¡Pago Exitoso!</h2>
-            <p class="text-gray-300 text-lg mb-6">
-                Tu compra ha sido procesada con éxito.
+            
+            <!-- Estado Rechazado -->
+            <div th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).rechazado}" class="text-red-500 text-6xl mb-6">
+                <i class="fas fa-times-circle animate-bounce"></i>
+            </div>
+            
+            <!-- Título según estado -->
+            <h2 th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).pendiente}" class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">⏳ Pago Pendiente</h2>
+            <h2 th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).completado}" class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">✅ ¡Pago Confirmado!</h2>
+            <h2 th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).rechazado}" class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">❌ Pago Rechazado</h2>
+
+            <!-- Mensaje según estado -->
+            <p th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).pendiente}" class="text-gray-700 text-lg mb-4">
+                Tu compra está siendo procesada. Espera la confirmación del administrador.
             </p>
-            <p th:if="${numeroBoleta}" class="text-gray-400 text-md mb-8">
-                Número de Boleta: <span class="font-semibold text-green-300" th:text="${numeroBoleta}"></span>
+            <p th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).completado}" class="text-gray-700 text-lg mb-4">
+                ¡Tu compra ha sido confirmada exitosamente!
             </p>
+            <p th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).rechazado}" class="text-gray-700 text-lg mb-4">
+                Tu compra ha sido rechazada.
+            </p>
+
+            <!-- Información del usuario -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <p class="text-gray-600 text-sm mb-2">
+                    <strong>Cliente:</strong> <span class="font-semibold text-blue-600" th:text="${usuario.nombre + ' ' + usuario.apellido}"></span>
+                </p>
+                <p class="text-gray-600 text-sm mb-2">
+                    <strong>Correo:</strong> <span class="font-semibold" th:text="${usuario.correo}"></span>
+                </p>
+                <p th:if="${numeroBoleta}" class="text-gray-600 text-sm">
+                    <strong>Número de Boleta:</strong> <span class="font-semibold text-green-600" th:text="${numeroBoleta}"></span>
+                </p>
+            </div>
+
+            <!-- Estado con badge -->
+            <div class="mb-6">
+                <span th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).pendiente}" 
+                      class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-800">
+                    ⏳ Pendiente de Confirmación
+                </span>
+                <span th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).completado}" 
+                      class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                    ✅ Confirmado
+                </span>
+                <span th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).rechazado}" 
+                      class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800">
+                    ❌ Rechazado
+                </span>
+            </div>
+
+            <!-- Botones de acción -->
             <div class="space-y-4">
-                <a href="/bienvenida" class="gradient-btn text-white font-bold py-3 px-6 rounded-xl w-full block shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                <a href="/bienvenida"
+                    class="w-full block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition transform hover:scale-105">
                     <i class="fas fa-home mr-2"></i> Volver al Inicio
                 </a>
-                <a href="/productos" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl w-full block shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                    <i class="fas fa-box-open mr-2"></i> Seguir Comprando
+                
+                <a href="/cliente/historial-boletas"
+                    class="w-full block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition transform hover:scale-105">
+                    <i class="fas fa-list mr-2"></i> Ver Historial de Boletas
                 </a>
+                
+                <!-- Botón de cancelar solo para boletas pendientes -->
+                <button th:if="${estadoPago == T(com.example.demo.modelo.Pago.EstadoPago).pendiente}" type="button" class="w-full block bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition transform hover:scale-105" data-bs-toggle="modal" data-bs-target="#modalRechazarCompra">
+                    <i class="fas fa-times mr-2"></i> Rechazar Compra
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="modalRechazarCompra" tabindex="-1" aria-labelledby="modalRechazarCompraLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalRechazarCompraLabel">¿Estás seguro de que quieres rechazar esta compra?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Esta acción <strong>no se puede deshacer</strong>.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, volver</button>
+                        <form th:action="@{/cliente/cancelar-compra}" method="post" style="display:inline;">
+                          <input type="hidden" name="numeroBoleta" th:value="${numeroBoleta}">
+                          <button type="submit" class="btn btn-danger">Sí, rechazar</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-[#232526] text-gray-300 text-center p-4 mt-8">
-        <p>&copy; 2024 Topito. Todos los derechos reservados.</p>
+
+    <footer class="bg-white border-t border-gray-200 text-gray-700 text-sm mt-16">
+        <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+            <h5 class="text-base font-semibold text-gray-900 mb-3">Topitop</h5>
+            <p class="text-sm leading-relaxed">Ropa de moda para toda la familia con estilo, comodidad y calidad.</p>
+            </div>
+            <div>
+            <h5 class="text-base font-semibold text-gray-900 mb-3">Enlaces útiles</h5>
+            <ul class="space-y-2">
+                <li><a href="/" class="hover:underline">Inicio</a></li>
+                <li><a href="/productos-publicos" class="hover:underline">Productos</a></li>
+                <li><a href="/login" class="hover:underline">Iniciar sesión</a></li>
+                <li><a href="/registro" class="hover:underline">Registrarse</a></li>
+            </ul>
+            </div>
+            <div>
+            <h5 class="text-base font-semibold text-gray-900 mb-3">Contáctanos</h5>
+            <ul class="space-y-2">
+                <li>📍 Av. Cutervo 123, Ica, Perú</li>
+                <li>📞 +51 987 654 321</li>
+                <li>✉️ soporte_ica@topitop.com</li>
+            </ul>
+            </div>
+            <div>
+            <h5 class="text-base font-semibold text-gray-900 mb-3">Síguenos</h5>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+            </div>
+            </div>
+        </div>
+
+        <div class="text-center text-gray-500 text-xs py-4 border-t border-gray-200">
+            © 2025 Topitop. Todos los derechos reservados.
+        </div>
     </footer>
 
+    <script>
+        // User Dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const userDropdown = document.getElementById('userDropdown');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (userDropdown && dropdownMenu) {
+                userDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!userDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

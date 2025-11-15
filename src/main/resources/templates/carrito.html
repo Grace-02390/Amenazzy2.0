@@ -3,336 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topito - Mi Carrito</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Mi Carrito</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/x-icon" href="./imgs/favico.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
         /* Estilos Base del Cuerpo: Fondo Oscuro y Fuente Inter */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #121212; /* Fondo muy oscuro, casi negro puro */
-            color: #e0e0e0; /* Texto claro para un alto contraste y legibilidad */
+            background-color: #e0e0e0; /* Fondo principal oscuro */
+            color: #e0e0e0; /* Color de texto por defecto */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            position: relative; /* Necesario para las animaciones de fondo */
-            overflow-x: hidden; /* Evita el scroll horizontal */
-            margin: 0; /* Reiniciar el margen por defecto del body */
-        }
-
-        /* Degradados Personalizados - Enfocados en la marca (verde) */
-        .gradient-bg {
-            background: linear-gradient(to right, #10B981 0%, #059669 100%); /* Verde esmeralda a verde oscuro */
-        }
-        .text-gradient-logo {
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            background-image: linear-gradient(to right, #10B981, #059669); /* Mismo degradado verde para el logo */
-        }
-
-        /* Sombras para Contenedores - Más pronunciadas para profundidad en tema oscuro */
-        .card-shadow {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
-        }
-
-        /* Navbar Profesional */
-        .navbar {
-            background-color: #1f1f1f; /* Fondo oscuro sutil */
-            border-bottom: 1px solid #333333; /* Borde discreto */
-            padding: 1rem 2rem; /* Más padding para un look más espacioso */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar-brand {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
-            text-decoration: none;
-        }
-        .navbar-links {
-            display: flex;
-            align-items: center;
-            gap: 1rem; /* space-x-4 */
-        }
-        .navbar-link {
-            color: #a0a0a0; /* Gris suave para enlaces */
-            font-weight: 500; /* medium */
-            text-decoration: none;
-            transition: color 0.3s ease-in-out;
-        }
-        .navbar-link:hover {
-            color: #10B981; /* Resaltado verde profesional */
-        }
-        .navbar-link.logout {
-            color: #EF4444; /* text-red-600 */
-        }
-        .navbar-link.logout:hover {
-            color: #B91C1C; /* hover:text-red-800 */
-        }
-        .cart-icon {
             position: relative;
-        }
-        .cart-icon .fa-shopping-cart {
-            font-size: 1.25rem; /* text-xl */
-            color: #10B981; /* text-blue-600 */
-            border-bottom: 2px solid #10B981; /* border-b-2 border-blue-600 */
-        }
-        .cart-count {
-            position: absolute;
-            top: -8px; /* top-[-8px] */
-            right: -8px; /* right-[-8px] */
-            background-color: #EF4444; /* bg-red-500 */
-            color: white;
-            font-size: 0.75rem; /* text-xs */
-            font-weight: 600; /* font-semibold */
-            border-radius: 9999px; /* rounded-full */
-            padding: 0.125rem 0.5rem; /* px-2 py-0.5 */
-            line-height: 1; /* Para centrar el texto */
-            display: inline-block;
-        }
-
-        /* Contenido Principal */
-        .main-content {
-            flex-grow: 1; /* flex-grow */
-            max-width: 1200px; /* container */
-            margin-left: auto; /* mx-auto */
-            margin-right: auto; /* mx-auto */
-            padding: 1rem; /* p-4 */
-        }
-        .page-title {
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 800; /* font-extrabold */
-            color: #f5f5f5; /* text-gray-800 */
-            text-align: center;
-            margin-bottom: 2.5rem; /* mb-10 */
-        }
-
-        /* Estado del Carrito Vacío */
-        .empty-cart-message {
-            background-color: #242424; /* bg-white */
-            padding: 2rem; /* p-8 */
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: var(--card-shadow); /* card-shadow */
-            text-align: center;
-        }
-        .empty-cart-message p {
-            color: #c0c0c0; /* text-gray-600 */
-            font-size: 1.25rem; /* text-xl */
-            margin-bottom: 1rem; /* mb-4 */
-        }
-        .empty-cart-message .btn-primary {
-            font-size: 1.125rem; /* font-bold */
-            padding: 0.75rem 1.5rem; /* py-3 px-6 */
-        }
-
-        /* Grid de Productos y Resumen */
-        .cart-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Por defecto, una columna en móviles */
-            gap: 2rem; /* gap-8 */
-        }
-        .cart-items-section {
-            background-color: #242424; /* bg-white */
-            padding: 1.5rem; /* p-6 */
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: var(--card-shadow); /* card-shadow */
-        }
-        .section-title {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 600; /* font-semibold */
-            color: #f5f5f5; /* text-gray-700 */
-            margin-bottom: 1.5rem; /* mb-6 */
-        }
-        .cart-item {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #383838; /* border-b border-gray-200 */
-            padding-top: 1rem; /* py-4 */
-            padding-bottom: 1rem; /* py-4 */
-        }
-        .cart-item:last-child {
-            border-bottom: 0; /* last:border-b-0 */
-        }
-        .cart-item-image {
-            width: 6rem; /* w-24 */
-            height: 6rem; /* h-24 */
-            object-fit: cover;
-            object-position: center;
-            border-radius: 0.5rem; /* rounded-lg */
-            margin-right: 1rem; /* mr-4 */
-        }
-        .cart-item-details {
-            flex-grow: 1; /* flex-grow */
-        }
-        .cart-item-name {
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 600; /* font-semibold */
-            color: #f5f5f5; /* text-gray-800 */
-        }
-        .cart-item-meta {
-            color: #a0a0a0; /* text-gray-600 */
-            font-size: 0.875rem; /* text-sm */
-        }
-        .cart-item-price-info {
-            display: flex;
-            align-items: baseline;
-            margin-top: 0.25rem; /* mt-1 */
-        }
-        .cart-item-price-discounted {
-            color: #EF4444; /* text-red-500 */
-            font-weight: 600; /* Seminegrita para destacar */
-            margin-right: 0.5rem; /* mr-2 */
-        }
-        .cart-item-price-original {
-            text-decoration: line-through;
-            color: #888888; /* text-gray-500 */
-            font-size: 0.875rem; /* text-sm */
-        }
-        .cart-item-price-final {
-            color: #10B981; /* text-blue-700 */
-            font-weight: 700; /* Negrita para el precio final */
-        }
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem; /* space-x-3 */
-        }
-        .cart-item-actions .btn-secondary {
-            background-color: #333333; /* bg-gray-700 */
-            color: white;
-            font-weight: 700;
-            padding: 0.25rem 0.75rem; /* py-1 px-3 */
-            border-radius: 0.375rem; /* rounded-md */
-            transition: background-color 0.2s ease;
-            border: none;
-            cursor: pointer;
-        }
-        .cart-item-actions .btn-secondary:hover {
-            background-color: #4a4a4a; /* hover:bg-gray-600 */
-        }
-        .cart-item-qty {
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 500; /* font-medium */
-        }
-        .btn-danger {
-            background-color: #DC2626; /* bg-red-700 */
-            color: white;
-            font-weight: 700;
-            padding: 0.5rem 0.75rem; /* py-2 px-3 */
-            border-radius: 0.75rem; /* rounded-xl */
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            transform: scale(1);
-            border: none;
-            cursor: pointer;
-            margin-left: 1rem; /* ml-4 */
-        }
-        .btn-danger:hover {
-            background-color: #B91C1C; /* hover:bg-red-800 */
-            transform: scale(1.05); /* hover:scale-105 */
-        }
-
-        /* Resumen del Pedido */
-        .order-summary-section {
-            background-color: #242424; /* bg-white */
-            padding: 1.5rem; /* p-6 */
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: var(--card-shadow); /* card-shadow */
-            height: fit-content; /* h-fit */
-            position: sticky;
-            top: 1rem; /* top-4 */
-        }
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.125rem; /* text-lg */
-            color: #c0c0c0; /* text-gray-700 */
-            margin-bottom: 0.5rem; /* mb-2 */
-        }
-        .summary-item.total {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
-            color: #f5f5f5; /* text-gray-800 */
-            border-top: 2px solid #383838; /* border-t-2 border-gray-200 */
-            padding-top: 1rem; /* pt-4 */
-            margin-top: 1rem; /* mt-4 */
-        }
-        .payment-methods-title {
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 600; /* font-semibold */
-            color: #f5f5f5; /* text-gray-700 */
-            margin-top: 2rem; /* mt-8 */
-            margin-bottom: 1rem; /* mb-4 */
-        }
-        .payment-method-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem; /* space-y-3 */
-        }
-        .payment-method-label {
-            display: flex;
-            align-items: center;
-            background-color: #333333; /* bg-gray-50 */
-            padding: 0.75rem; /* p-3 */
-            border-radius: 0.5rem; /* rounded-lg */
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            border: 1px solid #444444;
-        }
-        .payment-method-label:hover {
-            background-color: #4a4a4a; /* hover:bg-gray-100 */
-        }
-        .payment-method-radio {
-            height: 1.25rem; /* h-5 */
-            width: 1.25rem; /* w-5 */
-            color: #10B981; /* text-blue-600 */
-            accent-color: #10B981; /* Para navegadores que lo soportan */
-            border-color: #666; /* Borde más oscuro */
-            margin-right: 0.75rem; /* ml-3 */
-        }
-        .payment-method-radio:checked {
-            border-color: #10B981;
-        }
-        .payment-method-label span {
-            font-weight: 500; /* font-medium */
-            color: #e0e0e0;
-        }
-        .checkout-button {
-            margin-top: 2rem; /* mt-8 */
-            width: 100%; /* w-full */
-            font-size: 1.125rem; /* font-bold */
-            padding: 0.75rem 1.5rem; /* py-3 px-6 */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* shadow-lg */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            transform: scale(1);
-            border: none;
-            cursor: pointer;
-        }
-        .checkout-button:hover {
-            transform: scale(1.05); /* hover:scale-105 */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-        }
-        /* Botones primarios (ej. "Explorar Productos") */
-        .btn-primary {
-            background: linear-gradient(to right, #10B981 0%, #059669 100%); /* gradient-bg */
-            color: white;
-            font-weight: 700; /* font-bold */
-            padding: 0.75rem 1.5rem; /* py-3 px-6 */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* shadow-lg */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            transform: scale(1);
-            border: none;
-            cursor: pointer;
-            text-decoration: none; /* Asegura que los 'a' con esta clase no se subrayen */
-            display: inline-block; /* Permite aplicar padding y transform a 'a' */
-        }
-        .btn-primary:hover {
-            transform: scale(1.05); /* hover:scale-105 */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            overflow-x: hidden; /* Evita scroll horizontal */
+            margin: 0;
         }
 
         /* Modal de Mensajes */
@@ -390,19 +83,6 @@
             border-top: 1px solid #333333;
         }
 
-
-        /* --- Animaciones de Fondo y Elementos Decorativos (CSS puro) --- */
-
-        /* Estrellas de Fondo (para un efecto sutil de "espacio") */
-        .star {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.8); /* Blanco semi-transparente */
-            border-radius: 50%;
-            opacity: 0;
-            pointer-events: none;
-            animation: twinkle 3s linear infinite, fadeOut 3s forwards;
-            z-index: 0; /* Asegura que estén al fondo */
-        }
         @keyframes twinkle {
             0%, 100% { opacity: 0.7; transform: scale(1); }
             50% { opacity: 0.3; transform: scale(1.2); }
@@ -454,11 +134,37 @@
             .cart-grid {
                 grid-template-columns: 2fr 1fr; /* grid-cols-1, con 2/3 y 1/3 */
             }
-            /* Estas reglas no son necesarias si se usa grid directamente en la clase cart-grid */
-            /* .cart-items-section {
-                grid-column: span 2 / span 2; // lg:col-span-2
-            } */
         }
+        @keyframes fadeOutScale {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        @keyframes bounceScale {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+  .animate-remove {
+    animation: fadeOutScale 300ms ease forwards;
+  }
+
+  .animate-qty {
+    animation: bounceScale 300ms ease;
+  }
 
         /* Desktops y pantallas grandes (min-width: 1024px) */
         @media (min-width: 1024px) {
@@ -538,114 +244,229 @@
             .message-modal-text {
                 font-size: 1rem;
             }
-            .page-title {
-                font-size: 2rem;
-                margin-bottom: 1.5rem;
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
             }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="navbar-brand text-gradient-logo">
-        <a href="/bienvenida">Topito</a>
-    </div>
-    <div class="navbar-links">
-        <a href="/bienvenida" class="navbar-link">Inicio</a>
-        <a href="/nosotros" class="navbar-link">Nosotros</a>
-        <a href="/productos" class="navbar-link">Productos</a>
-        <a href="/logout" class="navbar-link logout">Cerrar Sesión</a>
-        <a href="/carrito" class="cart-icon">
-            <i class="fas fa-shopping-cart"></i>
-            <span th:if="${carritoCount > 0}" class="cart-count" th:text="${carritoCount}">0</span>
+<header>
+  <div class="w-full max-w-7xl mx-auto py-3">
+    <div class="flex justify-between gap-8 items-center">
+      <div>
+        <a href="/bienvenida">
+          <img src="https://cdn.brandfetch.io/idQpqgVquN/w/122/h/47/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B" 
+               alt="Topitop logo" 
+               class="h-8 hover:opacity-90 transition duration-300" />
         </a>
+      </div>
+      
+      <div class="flex items-center gap-8">
+        <nav class="hidden lg:flex gap-8 text-black text-base">
+          <a href="/bienvenida" class="hover:underline text-black">Inicio</a>
+          <a href="/nosotros" class="hover:underline text-black">Nosotros</a>
+          <a href="/productos" class="hover:underline text-black">Productos</a>
+        </nav>
+
+        <span class="hidden lg:block text-black">|</span>
+
+        <div class="flex gap-4 items-center relative">
+          <a href="/carrito" class="relative" title="Ver Carrito">
+            <i class="flex items-center justify-center bg-black text-white rounded-full w-[35px] h-[35px] bi bi-bag"></i>
+            <span th:if="${carritoCount > 0}"
+                  th:text="${carritoCount}"
+                  class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+            </span>
+          </a>
+          <a href="/logout" title="Cerrar Sesión"
+             class="flex items-center justify-center w-[35px] h-[35px] bg-red-700 hover:bg-red-800 text-white rounded-full transition duration-200">
+            <i class="bi bi-box-arrow-right text-lg"></i>
+          </a>
+        </div>
+      </div>
     </div>
-</nav>
+  </div>
+</header>
 
 <main class="main-content">
-    <h2 class="page-title">Mi Carrito de Compras</h2>
+    <h2 class="text-gray-800 font-medium text-center text-3xl mb-6">Mi Carrito de Compras</h2>
 
-    <div th:if="${#lists.isEmpty(carritoItems)}" class="empty-cart-message card-shadow">
-        <p>Tu carrito está vacío. ¡Empieza a llenarlo! 🛒✨</p>
-        <a href="/productos" class="btn-primary">
+    <div th:if="${#lists.isEmpty(carritoItems)}"
+        class="bg-white/90 border border-gray-300 rounded-2xl shadow-xl p-8 max-w-md mx-auto text-center space-y-4 animate-fade-in-up">
+    
+        <p class="text-lg font-medium text-gray-700">
+            Tu carrito está vacío. ¡Empieza a llenarlo!
+        </p>
+        
+        <a href="/productos"
+            class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-lg transition duration-200">
             Explorar Productos
         </a>
     </div>
 
-    <div th:if="${!#lists.isEmpty(carritoItems)}" class="cart-grid">
-        <div class="cart-items-section card-shadow">
-            <h3 class="section-title">Productos en tu Carrito</h3>
-            <div th:each="item : ${carritoItems}" th:id="'item-' + ${item.id}" class="cart-item">
-                <img th:src="${item.producto.imagenUrl != null and item.producto.imagenUrl != '' ? item.producto.imagenUrl : 'https://placehold.co/100x100/242424/10B981?text=Producto'}"
-                     alt="Imagen del producto" class="cart-item-image">
-                <div class="cart-item-details">
-                    <h4 class="cart-item-name" th:text="${item.producto.nombre}">Nombre Producto</h4>
-                    <p class="cart-item-meta" th:text="${item.producto.categoria} + ' - ' + ${item.producto.genero} + ' - Talla: ' + ${item.producto.talla}">Categoría - Género - Talla</p>
-                    <div class="cart-item-price-info">
-                            <span th:if="${item.producto.descuento > 0}" class="cart-item-price-discounted"
-                                  th:text="${#numbers.formatCurrency(item.producto.precio * (1 - item.producto.descuento/100))}">$XX.XX</span>
-                        <span th:classappend="${item.producto.descuento > 0 ? 'cart-item-price-original' : 'cart-item-price-final'}"
-                              th:text="${#numbers.formatCurrency(item.producto.precio)}">$XX.XX</span>
-                    </div>
-                </div>
-                <div class="cart-item-actions">
-                    <button onclick="updateQuantity(this, -1)" th:data-item-id="${item.id}" th:data-current-qty="${item.cantidad}"
-                            class="btn-secondary">
-                        -
-                    </button>
-                    <span th:text="${item.cantidad}" class="cart-item-qty" th:id="'qty-' + ${item.id}">1</span>
-                    <button onclick="updateQuantity(this, 1)" th:data-item-id="${item.id}" th:data-current-qty="${item.cantidad}"
-                            class="btn-secondary">
-                        +
-                    </button>
-                    <button onclick="removeItem(this)" th:data-item-id="${item.id}"
-                            class="btn-danger">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-            </div>
+    <div th:if="${!#lists.isEmpty(carritoItems)}" class="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto p-4 animate-fade-in-up">
+
+  <!-- Lista de productos -->
+  <div class="md:col-span-2 bg-white/90 border border-gray-300 rounded-2xl shadow-xl p-6 space-y-4">
+    <h3 class="text-xl font-semibold text-gray-800 text-center mb-4">Productos en tu Carrito</h3>
+
+    <div th:each="item : ${carritoItems}" 
+         th:id="'item-' + ${item.id}" 
+         class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 border-b pb-4 last:border-b-0 animate-fade-in-up">
+
+      <img th:src="${item.producto.imagenUrl != null and item.producto.imagenUrl != '' ? item.producto.imagenUrl : 'https://placehold.co/100x100/eeeeee/000000?text=Producto'}"
+           alt="Imagen del producto" 
+           class="w-24 h-24 rounded-lg object-cover border border-gray-200 shadow-sm" />
+
+      <div class="flex-1 space-y-1 text-sm text-gray-700">
+        <h4 class="text-base font-semibold text-gray-900" th:text="${item.producto.nombre}">Nombre Producto</h4>
+        <p class="text-gray-600 text-sm" 
+           th:text="${item.producto.categoria} + ' - ' + ${item.producto.genero} + ' - Talla: ' + ${item.producto.talla}">
+           Categoría - Género - Talla
+        </p>
+
+        <div class="flex items-center gap-2 mt-1">
+          <span th:if="${item.producto.descuento > 0}" 
+                class="text-red-600 font-bold"
+                th:text="'S/ ' + ${#numbers.formatDecimal(item.producto.precio * (1 - item.producto.descuento / 100), 1, 2)}">
+                $XX.XX
+          </span>
+          <span th:classappend="${item.producto.descuento > 0 ? 'line-through text-gray-500 text-sm' : 'text-blue-700 font-bold'}"
+                th:text="'S/ ' + ${#numbers.formatDecimal(item.producto.precio, 1, 2)}">
+                $XX.XX
+          </span>
         </div>
+      </div>
 
-        <div class="order-summary-section card-shadow">
-            <h3 class="section-title">Resumen del Pedido</h3>
-            <div class="summary-item">
-                <span>Subtotal:</span>
-                <span id="subtotal" th:text="${#numbers.formatCurrency(totalCarrito)}">$0.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Descuento:</span>
-                <span id="descuento" th:text="${#numbers.formatCurrency(totalDescuento)}">$0.00</span>
-            </div>
-            <div class="summary-item total">
-                <span>Total a Pagar:</span>
-                <span id="total-pagar" th:text="${#numbers.formatCurrency(totalConDescuento)}">$0.00</span>
-            </div>
+      <div class="flex items-center gap-2 mt-2 md:mt-0">
+        <button onclick="updateQuantity(this, -1)" 
+                th:data-item-id="${item.id}" 
+                th:data-current-qty="${item.cantidad}"
+                class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg font-bold text-sm transition">
+          -
+        </button>
 
-            <h4 class="payment-methods-title">Desea Pagar</h4>
-            <div class="payment-method-options">
-                <label class="payment-method-label">
-                    <input type="radio" name="metodoPago" value="plin" class="payment-method-radio">
-                    <span> Si deseo Pagar 💵</span>
-                </label>
-            </div>
+        <span th:text="${item.cantidad}" 
+              class="font-semibold text-gray-800 px-2 min-w-[1.5rem] text-center"
+              th:id="'qty-' + ${item.id}">
+          1
+        </span>
 
-            <button onclick="proceedToCheckout()" class="checkout-button btn-primary">
-                <i class="fas fa-money-bill-wave mr-2"></i> Ir a Pagar
-            </button>
-        </div>
+        <button onclick="updateQuantity(this, 1)" 
+                th:data-item-id="${item.id}" 
+                th:data-current-qty="${item.cantidad}"
+                class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg font-bold text-sm transition">
+          +
+        </button>
+
+        <button onclick="removeItem(this)" 
+                th:data-item-id="${item.id}"
+                class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
     </div>
+  </div>
+
+  <div class="bg-white/90 border border-gray-300 rounded-2xl shadow-xl p-6 flex flex-col justify-between animate-fade-in-up">
+    <div class="space-y-4">
+      <h3 class="text-xl font-semibold text-gray-800 text-center">Resumen del Pedido</h3>
+
+      <div class="flex justify-between text-sm text-gray-700">
+        <span>Subtotal:</span>
+        <span id="subtotal" th:text="'S/ ' + ${#numbers.formatDecimal(totalCarrito, 1, 2)}">S/ 0.00</span>
+      </div>
+
+      <div class="flex justify-between text-sm text-gray-700">
+        <span>Descuento:</span>
+        <span id="descuento" th:text="'S/ ' + ${#numbers.formatDecimal(totalDescuento, 1, 2)}">S/ 0.00</span>
+      </div>
+
+      <div class="flex justify-between text-base font-semibold text-gray-900 border-t pt-3">
+        <span>Total a Pagar:</span>
+        <span id="total-pagar" th:text="'S/ ' + ${#numbers.formatDecimal(totalConDescuento, 1, 2)}">S/ 0.00</span>
+      </div>
+
+      <h4 class="text-center text-gray-700 text-sm font-medium mt-4">¿Deseas pagar?</h4>
+
+      <label class="flex items-center gap-2 text-sm text-gray-800">
+        <input type="radio" name="metodoPago" value="plin" class="accent-red-700">
+        <span>Sí deseo pagar 💵</span>
+      </label>
+    </div>
+
+    <button onclick="proceedToCheckout()" 
+            class="mt-6 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-xl transition">
+      <i class="fas fa-money-bill-wave mr-2"></i> Ir a Pagar
+    </button>
+  </div>
+</div>
 </main>
 
-<div id="messageModal" class="message-modal-overlay">
-    <div class="message-modal-content card-shadow">
-        <p id="messageText" class="message-modal-text"></p>
-        <button onclick="hideMessageModal()" class="message-modal-close-btn">Cerrar</button>
-    </div>
+<div id="messageModal" class="fixed inset-0 bg-white/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
+  <div class="bg-white/90 border border-gray-300 p-6 rounded-2xl shadow-xl text-center max-w-sm w-full mx-4 animate-fade-in-down">
+    
+    <p id="messageText" class="text-base md:text-lg font-semibold text-gray-800 mb-5">
+    </p>
+    
+    <button onclick="hideMessageModal()" 
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200">
+      Cerrar
+    </button>
+    
+  </div>
 </div>
 
-<footer class="page-footer">
-    <p>&copy; 2024 Topito. Todos los derechos reservados. 🐾</p>
+
+<footer class="bg-white border-t border-gray-200 text-gray-700 text-sm mt-16">
+  <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+    <div>
+      <h5 class="text-base font-semibold text-gray-900 mb-3">Topitop</h5>
+      <p class="text-sm leading-relaxed">Ropa de moda para toda la familia con estilo, comodidad y calidad.</p>
+    </div>
+    <div>
+      <h5 class="text-base font-semibold text-gray-900 mb-3">Enlaces útiles</h5>
+      <ul class="space-y-2">
+        <li><a href="/" class="hover:underline">Inicio</a></li>
+        <li><a href="/productos-publicos" class="hover:underline">Productos</a></li>
+        <li><a href="/login" class="hover:underline">Iniciar sesión</a></li>
+        <li><a href="/registro" class="hover:underline">Registrarse</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="text-base font-semibold text-gray-900 mb-3">Contáctanos</h5>
+      <ul class="space-y-2">
+        <li>📍 Av. Cutervo 123, Ica, Perú</li>
+        <li>📞 +51 987 654 321</li>
+        <li>✉️ soporte_ica@topitop.com</li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="text-base font-semibold text-gray-900 mb-3">Síguenos</h5>
+      <div class="flex space-x-4">
+        <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center text-gray-500 text-xs py-4 border-t border-gray-200">
+    © 2025 Topitop. Todos los derechos reservados.
+  </div>
 </footer>
 
 <script>
@@ -766,58 +587,6 @@
             showMessageModal('Por favor, selecciona Si desea pagar. ☝️', false);
         }
     }
-
-    // --- JavaScript para animaciones de fondo y emoticones ---
-
-    // Función para crear estrellas parpadeantes
-    function createStar() {
-        const star = document.createElement('div');
-        star.classList.add('star');
-        const size = Math.random() * 3 + 1; /* Tamaño aleatorio entre 1px y 4px */
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        star.style.left = `${Math.random() * 100}vw`; /* Posición horizontal aleatoria */
-        star.style.top = `${Math.random() * 100}vh`; /* Posición vertical aleatoria */
-        star.style.animationDelay = `${Math.random() * 2}s`; /* Retardo de animación aleatorio */
-        star.style.animationDuration = `${Math.random() * 2 + 2}s`; /* Duración de animación aleatoria */
-        document.body.appendChild(star);
-
-        // Eliminar la estrella después de su ciclo de vida para optimizar el rendimiento
-        setTimeout(() => {
-            star.remove();
-        }, 5000);
-    }
-
-    // Genera una nueva estrella cada 150 milisegundos
-    setInterval(createStar, 150);
-
-    // Función para crear emoticones flotantes
-    const emojis = ['✨', '💚', '🌟', '🛒', '🛍️', '💰', '🥳', '✅', '💳', '💵']; /* Lista de emoticones variada */
-
-    function createFloatingEmoji() {
-        const emoji = document.createElement('div');
-        emoji.classList.add('floating-emoji');
-        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)]; /* Emoticon aleatorio */
-        const startX = Math.random() * 100; /* Posición X inicial aleatoria */
-        emoji.style.left = `${startX}vw`;
-        emoji.style.bottom = `-50px`; /* Empieza desde abajo, fuera de la vista */
-        emoji.style.animationDuration = `${Math.random() * 8 + 8}s`; /* Duración de 8 a 16 segundos */
-        emoji.style.animationDelay = `${Math.random() * 5}s`; /* Retardo aleatorio */
-
-        // Variables CSS para la animación final
-        emoji.style.setProperty('--end-x', `${(Math.random() - 0.5) * 50 + startX}vw`); /* Desplazamiento lateral */
-        emoji.style.setProperty('--end-rotate', `${(Math.random() - 0.5) * 720}deg`); /* Rotación aleatoria */
-
-        document.body.appendChild(emoji);
-
-        // Eliminar el emoticón después de su animación para optimizar el rendimiento
-        setTimeout(() => {
-            emoji.remove();
-        }, parseFloat(emoji.style.animationDuration) * 1000);
-    }
-
-    // Genera un nuevo emoticón flotante cada 500 milisegundos
-    setInterval(createFloatingEmoji, 500);
 </script>
 </body>
 </html>

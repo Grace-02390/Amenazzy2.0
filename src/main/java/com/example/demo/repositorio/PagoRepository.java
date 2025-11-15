@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime; // Importar LocalDateTime
 import java.util.List;
+import java.util.Optional;
 // import java.util.Map; // Eliminado: no se usa en esta interfaz
 
 @Repository
@@ -48,4 +49,13 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     //        "GROUP BY dv.producto " +
     //        "ORDER BY totalCantidad DESC")
     // List<Object[]> findProductosMasVendidos();
+    
+    // Buscar pagos por estado
+    List<Pago> findByEstado(Pago.EstadoPago estado);
+    
+    // Buscar pagos por usuario y estado
+    List<Pago> findByUsuarioAndEstado(com.example.demo.modelo.Usuario usuario, Pago.EstadoPago estado);
+    
+    // Buscar pago por número de boleta
+    Optional<Pago> findByNumeroBoleta(String numeroBoleta);
 }

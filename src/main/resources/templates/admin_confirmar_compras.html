@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Compras - Panel de Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand img {
+            height: 40px;
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .status-pendiente {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .action-buttons {
+            white-space: nowrap;
+        }
+        .action-buttons .btn {
+            margin-right: 5px;
+        }
+        .customer-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/img/topitop_logo.png" alt="TopiTop Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/bienvenida">🏠 Panel Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/productos">🛍️ Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/usuarios">👥 Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/confirmar-compras">✅ Confirmar Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/ventas">📊 Ventas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/descuentos">🎫 Descuentos</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            👤 <span th:text="${nombreAdmin}">Administrador</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/logout">🚪 Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">✅ Confirmar Compras Pendientes</h1>
+                
+                <!-- Mensajes Flash -->
+                <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${mensaje}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-2x mb-2"></i>
+                                <h5 class="card-title">Compras Pendientes</h5>
+                                <h3 class="card-text" th:text="${#lists.size(comprasPendientes)}">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-2x mb-2"></i>
+                                <h5 class="card-title">Clientes Únicos</h5>
+                                <h3 class="card-text" th:text="${comprasPendientes != null ? #sets.size(comprasPendientes.![usuario.id]) : 0}">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+                                <h5 class="card-title">Total Pendiente</h5>
+                                <h3 class="card-text" th:text="${'S/ ' + #numbers.formatDecimal(#aggregates.sum(comprasPendientes.![montoPagado]), 1, 2)}">S/ 0.00</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Compras Pendientes -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            ⏳ Compras Pendientes de Confirmación
+                            <span class="badge bg-warning ms-2" th:text="${#lists.size(comprasPendientes)}">0</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(comprasPendientes)}" class="text-center py-4">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                            <h5 class="text-success">¡Excelente!</h5>
+                            <p class="text-muted">No hay compras pendientes de confirmación.</p>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(comprasPendientes)}" class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>📄 Número de Boleta</th>
+                                        <th>👤 Cliente</th>
+                                        <th>💰 Monto</th>
+                                        <th>💳 Método de Pago</th>
+                                        <th>📅 Fecha</th>
+                                        <th>📦 Productos</th>
+                                        <th>⚡ Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="compra : ${comprasPendientes}">
+                                        <td>
+                                            <strong th:text="${compra.numeroBoleta}">BOLETA-12345678</strong>
+                                        </td>
+                                        <td>
+                                            <div class="customer-info">
+                                                <strong th:text="${compra.usuario.nombre}">Cliente</strong><br>
+                                                <small th:text="${compra.usuario.correo}">cliente@email.com</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success" th:text="${'S/ ' + #numbers.formatDecimal(compra.montoPagado, 1, 2)}">
+                                                S/ 0.00
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary" th:text="${compra.metodoPago}">EFECTIVO</span>
+                                        </td>
+                                        <td>
+                                            <span th:text="${#temporals.format(compra.fechaVenta, 'dd/MM/yyyy HH:mm')}">
+                                                01/01/2024 12:00
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-info" 
+                                                    data-bs-toggle="modal" 
+                                                    th:data-bs-target="'#modalDetalles-' + ${compra.id}">
+                                                👁️ Ver Detalles
+                                            </button>
+                                        </td>
+                                        <td class="action-buttons">
+                                            <form th:action="@{/admin/confirmar-compra}" method="post" style="display: inline;">
+                                                <input type="hidden" name="pagoId" th:value="${compra.id}">
+                                                <button type="submit" class="btn btn-success btn-sm" 
+                                                        onclick="return confirm('¿Estás seguro de confirmar esta compra?')">
+                                                    ✅ Confirmar
+                                                </button>
+                                            </form>
+                                            <form th:action="@{/admin/cancelar-compra}" method="post" style="display: inline;">
+                                                <input type="hidden" name="pagoId" th:value="${compra.id}">
+                                                <button type="submit" class="btn btn-danger btn-sm" 
+                                                        onclick="return confirm('¿Estás seguro de cancelar esta compra?')">
+                                                    ❌ Cancelar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales para detalles de productos -->
+    <div th:each="compra : ${comprasPendientes}" th:if="${compra.detallesVenta != null and !#lists.isEmpty(compra.detallesVenta)}">
+        <div class="modal fade" th:id="'modalDetalles-' + ${compra.id}" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            📦 Detalles de la Compra: <span th:text="${compra.numeroBoleta}"></span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>👤 Cliente:</strong><br>
+                                <span th:text="${compra.usuario.nombre}">Cliente</span><br>
+                                <span th:text="${compra.usuario.correo}">cliente@email.com</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>📅 Fecha:</strong><br>
+                                <span th:text="${#temporals.format(compra.fechaVenta, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>🛍️ Producto</th>
+                                        <th>📊 Cantidad</th>
+                                        <th>💰 Precio Unitario</th>
+                                        <th>💵 Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="detalle : ${compra.detallesVenta}">
+                                        <td>
+                                            <strong th:text="${detalle.producto.nombre}">Producto</strong>
+                                        </td>
+                                        <td th:text="${detalle.cantidad}">1</td>
+                                        <td th:text="${'S/ ' + #numbers.formatDecimal(detalle.precioUnitario, 1, 2)}">
+                                            S/ 0.00
+                                        </td>
+                                        <td th:text="${'S/ ' + #numbers.formatDecimal(detalle.precioUnitario * detalle.cantidad, 1, 2)}">
+                                            S/ 0.00
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-dark">
+                                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                        <td>
+                                            <strong th:text="${'S/ ' + #numbers.formatDecimal(compra.montoPagado, 1, 2)}">
+                                                S/ 0.00
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2024 TopiTop. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

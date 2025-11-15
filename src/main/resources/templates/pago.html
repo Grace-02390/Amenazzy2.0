@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Topito - Confirmar Pago</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/x-icon" href="./imgs/favico.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #121212;
+            background-color: #e0e0e0;
             color: #e0e0e0;
             display: flex;
             flex-direction: column;
@@ -20,203 +25,6 @@
             position: relative;
             overflow-x: hidden;
             margin: 0;
-        }
-
-        .gradient-green {
-            background-image: linear-gradient(to right, #10B981, #059669);
-        }
-        .text-gradient-green {
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            background-image: linear-gradient(to right, #10B981, #059669);
-        }
-
-        .card-shadow {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-shadow:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
-        }
-
-        nav {
-            background-color: #1f1f1f;
-            border-bottom: 1px solid #333333;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav .text-2xl {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        nav a {
-            color: #a0a0a0;
-            font-weight: 500;
-            text-decoration: none;
-            transition: color 0.3s ease-in-out;
-        }
-        nav a:hover {
-            color: #10B981;
-        }
-        nav a.border-b-2 {
-            border-bottom: 2px solid #10B981;
-            color: #10B981;
-        }
-        nav a.text-red-600 {
-            color: #EF4444;
-        }
-        nav a.text-red-600:hover {
-            color: #B91C1C;
-        }
-        nav .fa-shopping-cart {
-            color: #10B981;
-        }
-        nav .cart-count {
-            background-color: #EF4444;
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 9999px;
-            padding: 0.125rem 0.5rem;
-            line-height: 1;
-            display: inline-block;
-        }
-
-        main {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .payment-card {
-            background-color: #242424;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-            text-align: center;
-            max-width: 40rem;
-            width: 100%;
-        }
-        .payment-card h2 {
-            font-size: 2.25rem;
-            font-weight: 800;
-            color: #f5f5f5;
-            margin-bottom: 2rem;
-        }
-        .payment-card .alert {
-            background-color: #3d1c1c;
-            border: 1px solid #7c2424;
-            color: #fca5a5;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .payment-card p {
-            color: #c0c0c0;
-            font-size: 1.125rem;
-            text-align: left;
-        }
-        .payment-card p strong {
-            color: #e0e0e0;
-        }
-        .payment-card .total-amount {
-            color: #10B981;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-        .payment-card input[type="radio"] {
-            height: 1rem;
-            width: 1rem;
-            color: #10B981;
-            background-color: #333333;
-            border-color: #444444;
-            border-radius: 0.25rem;
-        }
-        .payment-card input[type="radio"]:focus {
-            ring-color: #10B981;
-            border-color: #10B981;
-        }
-        .payment-card label {
-            color: #e0e0e0;
-            font-size: 1.125rem;
-            margin-left: 0.5rem;
-        }
-        .payment-card button[type="submit"] {
-            font-weight: 700;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            transform: scale(1);
-        }
-        .payment-card button[type="submit"]:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-        }
-        .payment-card a {
-            color: #10B981;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-        .payment-card a:hover {
-            color: #34D399;
-            text-decoration: underline;
-        }
-
-        #messageModal {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            display: none;
-        }
-        #messageModal > div {
-            background-color: #242424;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            text-align: center;
-        }
-        #messageModal p {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        #messageModal p.text-green-700 {
-            color: #10B981;
-        }
-        #messageModal p.text-red-700 {
-            color: #EF4444;
-        }
-        #messageModal button {
-            background-color: #10B981;
-            color: white;
-            font-weight: 700;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s ease;
-        }
-        #messageModal button:hover {
-            background-color: #059669;
-        }
-
-        footer {
-            background-color: #1f1f1f;
-            color: #a0a0a0;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            border-top: 1px solid #333333;
         }
 
         @media (max-width: 768px) {
@@ -249,73 +57,147 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
+    <header>
+        <div class="w-full max-w-7xl mx-auto py-3">
+            <div class="flex justify-between gap-8 items-center">
+            <div>
+                <a href="/bienvenida">
+                <img src="https://cdn.brandfetch.io/idQpqgVquN/w/122/h/47/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B" 
+                    alt="Topitop logo" 
+                    class="h-8 hover:opacity-90 transition duration-300" />
+                </a>
+            </div>
+            
+            <div class="flex items-center gap-8">
+                <nav class="hidden lg:flex gap-8 text-black text-base">
+                <a href="/bienvenida" class="hover:underline text-black">Inicio</a>
+                <a href="/nosotros" class="hover:underline text-black">Nosotros</a>
+                <a href="/productos" class="hover:underline text-black">Productos</a>
+                </nav>
 
-<nav class="shadow-md p-4 flex justify-between items-center">
-    <div class="text-2xl font-bold text-gradient-green">
-        <a href="/bienvenida">Topito</a>
-    </div>
-    <div class="flex items-center space-x-4">
-        <a href="/bienvenida" class="text-gray-700 hover:text-blue-600 font-medium">Inicio</a>
-        <a href="/nosotros" class="text-gray-700 hover:text-blue-600 font-medium">Nosotros</a>
-        <a href="/productos" class="text-gray-700 hover:text-blue-600 font-medium">Productos</a>
-        <a href="/logout" class="text-red-600 hover:text-red-800 font-medium">Cerrar Sesión</a>
-        <a href="/carrito" class="relative">
-            <i class="fas fa-shopping-cart text-xl"></i>
-            <span th:if="${carritoCount > 0}" class="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5" th:text="${carritoCount}">0</span>
-        </a>
-    </div>
-</nav>
+                <span class="hidden lg:block text-black">|</span>
 
-<main>
-    <div class="payment-card">
-        <h2 class="text-4xl font-extrabold text-gray-800 mb-8">Confirmar Pago</h2>
+                <div class="flex gap-4 items-center relative">
+                <a href="/carrito" class="relative" title="Ver Carrito">
+                    <i class="flex items-center justify-center bg-black text-white rounded-full w-[35px] h-[35px] bi bi-bag"></i>
+                    <span th:if="${carritoCount > 0}"
+                        th:text="${carritoCount}"
+                        class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                    </span>
+                </a>
+                <a href="/logout" title="Cerrar Sesión"
+                    class="flex items-center justify-center w-[35px] h-[35px] bg-red-700 hover:bg-red-800 text-white rounded-full transition duration-200">
+                    <i class="bi bi-box-arrow-right text-lg"></i>
+                </a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </header>
 
-        <div th:if="${error}" class="alert" role="alert">
+    <main class="min-h-screen py-16 px-6">
+        <div class="max-w-2xl mx-auto bg-white/90 border border-gray-300 rounded-3xl shadow-2xl p-10 space-y-8 animate-fade-in-up">
+
+            <h2 class="text-4xl font-extrabold text-gray-800 text-center">Confirmar Pago</h2>
+
+            <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-5 py-3 rounded-xl text-base text-center" role="alert">
             <span th:text="${error}"></span>
-        </div>
+            </div>
 
-        <div class="space-y-4 mb-8 text-left">
-            <p><strong>Monto Total:</strong> <span class="total-amount" th:text="${'S/.' + #numbers.formatDecimal(totalPagar, 1, 2)}">S/.0.00</span></p>
-            <p><strong>Método de Pago:</strong> <span th:text="${metodoPago}"></span></p>
-            <p><strong>Número de Boleta:</strong> <span th:text="${numeroBoleta}"></span></p>
-        </div>
+            <div class="space-y-4 text-base text-gray-700">
+            <p><strong class="text-gray-800">Monto Total:</strong> <span class="text-blue-700 font-semibold" th:text="${'S/.' + #numbers.formatDecimal(totalPagar, 1, 2)}">S/.0.00</span></p>
+            <p><strong class="text-gray-800">Número de Boleta:</strong> <span th:text="${numeroBoleta}"></span></p>
+            </div>
 
-        <form th:action="@{/pago/confirmar}" method="post">
+            <form th:action="@{/pago/confirmar}" method="post" class="space-y-6">
             <input type="hidden" name="totalPagar" th:value="${totalPagar}" />
             <input type="hidden" name="numeroBoleta" th:value="${numeroBoleta}" />
 
             <div class="flex flex-col space-y-4 mb-6">
-
+                <h3 class="text-gray-700 font-bold text-gl">Método de Pago:</h3>
                 <div class="flex items-center">
-                    <input id="pagoEfectivo" type="radio" name="metodoPago" value="EFECTIVO" class="focus:ring-blue-500 rounded">
-                    <label for="pagoEfectivo">Efectivo</label>
+                    <input id="pagoEfectivo" type="radio" name="metodoPago" value="EFECTIVO"
+                        class="focus:ring-red-600 rounded" onclick="toggleCardForm(false)">
+                    <label for="pagoEfectivo" class="ml-2 text-gray-700">Efectivo</label>
                 </div>
                 <div class="flex items-center">
-                    <input id="pagoTarjeta" type="radio" name="metodoPago" value="TARJETA" class="focus:ring-blue-500 rounded">
-                    <label for="pagoTarjeta">Tarjeta</label>
+                    <input id="pagoTarjeta" type="radio" name="metodoPago" value="TARJETA"
+                        class="focus:ring-red-600 rounded" onclick="toggleCardForm(true)">
+                    <label for="pagoTarjeta" class="ml-2 text-gray-700">Tarjeta</label>
                 </div>
             </div>
-            <button type="submit" class="gradient-green text-white font-bold py-3 px-6 rounded-xl w-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                <div id="cardDetails" class="space-y-4 mb-6 hidden">
+                <input type="text" name="numeroTarjeta" placeholder="Número de Tarjeta"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-500 text-gray-700" required>
+
+                <div class="flex gap-4">
+                    <input type="text" name="fechaVencimiento" placeholder="MM/AA"
+                        class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-500 text-gray-700" required>
+                    <input type="text" name="cvv" placeholder="CVV"
+                        class="w-24 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-500 text-gray-700" required>
+                </div>
+                </div>
+
+            <button type="submit"
+                    class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold text-lg py-3 px-6 rounded-2xl shadow-xl transition duration-300 transform hover:scale-105 active:scale-95">
                 <i class="fas fa-check-circle mr-2"></i> Confirmar y Realizar Pago
             </button>
-        </form>
+            </form>
 
-        <a href="/carrito" class="inline-block mt-6">
-            <i class="fas fa-arrow-left mr-2"></i> Volver al Carrito
-        </a>
+            <div class="text-center">
+            <a href="/carrito"
+                class="inline-block text-gray-700 hover:underline text-base font-medium transition transform hover:scale-105 active:scale-95">
+                <i class="fas fa-arrow-left mr-1"></i> Volver al Carrito
+            </a>
+            </div>
+        </div>
+    </main>
+
+    <div id="messageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <p id="messageText" class="text-lg font-semibold mb-4"></p>
+            <button onclick="hideMessageModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Cerrar</button>
+        </div>
     </div>
-</main>
 
-<div id="messageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-        <p id="messageText" class="text-lg font-semibold mb-4"></p>
-        <button onclick="hideMessageModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Cerrar</button>
+    <footer class="bg-white border-t border-gray-200 text-gray-700 text-sm mt-16">
+    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Topitop</h5>
+        <p class="text-sm leading-relaxed">Ropa de moda para toda la familia con estilo, comodidad y calidad.</p>
+        </div>
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Enlaces útiles</h5>
+        <ul class="space-y-2">
+            <li><a href="/" class="hover:underline">Inicio</a></li>
+            <li><a href="/productos-publicos" class="hover:underline">Productos</a></li>
+            <li><a href="/login" class="hover:underline">Iniciar sesión</a></li>
+            <li><a href="/registro" class="hover:underline">Registrarse</a></li>
+        </ul>
+        </div>
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Contáctanos</h5>
+        <ul class="space-y-2">
+            <li>📍 Av. Cutervo 123, Ica, Perú</li>
+            <li>📞 +51 987 654 321</li>
+            <li>✉️ soporte_ica@topitop.com</li>
+        </ul>
+        </div>
+        <div>
+        <h5 class="text-base font-semibold text-gray-900 mb-3">Síguenos</h5>
+        <div class="flex space-x-4">
+            <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+        </div>
+        </div>
     </div>
-</div>
 
-<footer>
-    <p>&copy; 2024 Topito. Todos los derechos reservados.</p>
-</footer>
+    <div class="text-center text-gray-500 text-xs py-4 border-t border-gray-200">
+        © 2025 Topitop. Todos los derechos reservados.
+    </div>
+    </footer>
+</body>
 
 <script>
     function showMessageModal(message, isSuccess = true) {
@@ -348,6 +230,18 @@
             showMessageModal(errorMessage, false);
         }
     };
+    function toggleCardForm(show) {
+        const form = document.getElementById('cardDetails');
+        const inputs = form.querySelectorAll('input');
+
+        if (show) {
+            form.classList.remove('hidden');
+            inputs.forEach(input => input.setAttribute('required', 'required'));
+        } else {
+            form.classList.add('hidden');
+            inputs.forEach(input => input.removeAttribute('required'));
+        }
+  } 
 </script>
 </body>
 </html>

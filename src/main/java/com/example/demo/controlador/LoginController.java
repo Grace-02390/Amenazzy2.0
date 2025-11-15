@@ -19,7 +19,11 @@ public class LoginController {
      * @return El nombre de la plantilla Thymeleaf para la página de login.
      */
     @GetMapping("/login")
-    public String showLoginForm(Model model, @RequestParam(value = "error", required = false) String error) {
+    public String showLoginForm(Model model, @RequestParam(value = "error", required = false) String error, HttpSession session) {
+        // Si el usuario ya está autenticado, redirigir a /productos
+        if (session.getAttribute("usuarioAutenticado") != null) {
+            return "redirect:/productos";
+        }
         if (error != null) {
             model.addAttribute("error", "Correo o contraseña incorrectos.");
         }

@@ -68,7 +68,7 @@ public class PagoServiceImpl implements PagoService {
         pago.setMetodoPago(metodoPago);
         pago.setFechaVenta(LocalDateTime.now()); // Usar LocalDateTime directamente
         pago.setNumeroBoleta(numeroBoleta);
-        pago.setEstado(Pago.EstadoPago.completado);
+        pago.setEstado(Pago.EstadoPago.pendiente);
 
             System.out.println("Procesando pago para usuario: " + usuario.getCorreo());
         Pago savedPago = pagoRepository.save(pago);
@@ -176,5 +176,43 @@ public class PagoServiceImpl implements PagoService {
     @Override
     public List<Pago> findAllPagos() {
         return pagoRepository.findAll();
+    }
+    
+    @Override
+    public List<Pago> findPagosByEstado(Pago.EstadoPago estado) {
+        return pagoRepository.findByEstado(estado);
+    }
+    
+    @Override
+    public List<Pago> findPagosByUsuarioAndEstado(Usuario usuario, Pago.EstadoPago estado) {
+        return pagoRepository.findByUsuarioAndEstado(usuario, estado);
+    }
+    
+    @Override
+    @Transactional
+    public Pago cambiarEstadoPago(Long pagoId, Pago.EstadoPago nuevoEstado) {
+        Optional<Pago> pagoOptional = pagoRepository.findById(pagoId);
+        if (pagoOptional.isPresent()) {
+            Pago pago = pagoOptional.get();
+            // Si se rechaza y antes era pendiente, devolver stock
+            if (nuevoEstado == Pago.EstadoPago.rechazado && pago.getEstado() == Pago.EstadoPago.pendiente) {
+                if (pago.getDetallesVenta() != null) {
+                    for (DetalleVenta detalle : pago.getDetallesVenta()) {
+                        Producto producto = detalle.getProducto();
+                        producto.setStock(producto.getStock() + detalle.getCantidad());
+                        productoRepository.save(producto);
+                    }
+                }
+            }
+            pago.setEstado(nuevoEstado);
+            return pagoRepository.save(pago);
+        } else {
+            throw new RuntimeException("Pago con ID " + pagoId + " no encontrado.");
+        }
+    }
+    
+    @Override
+    public Optional<Pago> findPagoByNumeroBoleta(String numeroBoleta) {
+        return pagoRepository.findByNumeroBoleta(numeroBoleta);
     }
 }

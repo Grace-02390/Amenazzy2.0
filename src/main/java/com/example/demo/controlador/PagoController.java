@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute; // Importar Model
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID; // Para generar el número de boleta
 
 @Controller
@@ -141,7 +142,20 @@ public class PagoController {
         if (usuarioAutenticado == null) {
             return "redirect:/login";
         }
-        model.addAttribute("numeroBoleta", numeroBoleta);
+        
+        // Buscar el pago por número de boleta
+        Optional<Pago> pagoOptional = pagoService.findPagoByNumeroBoleta(numeroBoleta);
+        if (pagoOptional.isPresent()) {
+            Pago pago = pagoOptional.get();
+            model.addAttribute("pago", pago);
+            model.addAttribute("numeroBoleta", numeroBoleta);
+            model.addAttribute("estadoPago", pago.getEstado());
+            model.addAttribute("usuario", usuarioAutenticado);
+        } else {
+            // Si no se encuentra el pago, redirigir al inicio
+            return "redirect:/bienvenida";
+        }
+        
         model.addAttribute("carritoCount", carritoService.countItemsInCarrito(usuarioAutenticado));
         return "pago_exito";
     }
