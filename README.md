@@ -45,3 +45,4 @@
 - `src/main/resources/` - Archivos de configuración y templates
 - `src/main/resources/static/` - Archivos estáticos (CSS, JS, imágenes)
 - `src/main/resources/templates/` - Templates Thymeleaf 
+- Todo correcto ;)
