@@ -1,4 +1,4 @@
-# Dime Gracias - Aplicación Spring Boot
+Aplicación Spring Boot
 
 ## Despliegue en Render
 
