@@ -14,6 +14,40 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+	webhookUrl: 'http://localhost:5678/webhook/9fe9ece8-a368-4289-b5ed-56acf155dae9/chat',
+	webhookConfig: {
+		method: 'POST',
+		headers: {}
+	},
+	target: '#n8n-chat',
+	mode: 'window',
+	chatInputKey: 'chatInput',
+	chatSessionKey: 'sessionId',
+	loadPreviousSession: true,
+	metadata: {},
+	showWelcomeScreen: false,
+	defaultLanguage: 'en',
+	initialMessages: [
+		'Hola Bienvenido! 👋',
+		'Mi nombre es Clara. Como te puedo ayudar el dia de hoy?'
+	],
+	i18n: {
+		en: {
+			title: 'Hola Bienvenido! 👋',
+			subtitle: "Empieza a charlar. Estaremos aqui para ayudarte 24/7.",
+			footer: '',
+			getStarted: 'Nueva conversacion',
+			inputPlaceholder: 'Tipo de pregunta..',
+		},
+	},
+	enableStreaming: false,
+});
+</script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -25,7 +59,7 @@
   <main class="flex-grow flex items-center justify-center p-4">
     <div class="bg-white p-8 md:p-12 rounded-2xl shadow-2xl text-center max-w-md w-full">
       <img 
-        src="https://cdn.brandfetch.io/idQpqgVquN/w/122/h/47/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiCmWsXvxJYw_vP5Pz_2-j3--o5CwaAZK7o7tMqxxmI1yG0chygARpu6w0BoisYWFNGw&usqp=CAU"
         alt="Logo Amenazzy"
         class="max-w-[180px] mx-auto mb-4"
       />

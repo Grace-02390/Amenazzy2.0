@@ -10,6 +10,40 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+	webhookUrl: 'http://localhost:5678/webhook/9fe9ece8-a368-4289-b5ed-56acf155dae9/chat',
+	webhookConfig: {
+		method: 'POST',
+		headers: {}
+	},
+	target: '#n8n-chat',
+	mode: 'window',
+	chatInputKey: 'chatInput',
+	chatSessionKey: 'sessionId',
+	loadPreviousSession: true,
+	metadata: {},
+	showWelcomeScreen: false,
+	defaultLanguage: 'en',
+	initialMessages: [
+		'Hola Bienvenido! 👋',
+		'Mi nombre es Clara. Como te puedo ayudar el dia de hoy?'
+	],
+	i18n: {
+		en: {
+			title: 'Hola Bienvenido! 👋',
+			subtitle: "Empieza a charlar. Estaremos aqui para ayudarte 24/7.",
+			footer: '',
+			getStarted: 'Nueva conversacion',
+			inputPlaceholder: 'Tipo de pregunta..',
+		},
+	},
+	enableStreaming: false,
+});
+</script>
     <style>
         /* Base Styles: Dark Background and Inter Font */
         body {
@@ -397,7 +431,7 @@
     <div class="flex justify-between gap-8 items-center">
       <div>
         <a href="/bienvenida">
-          <img src="https://cdn.brandfetch.io/idQpqgVquN/w/122/h/47/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B" 
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiCmWsXvxJYw_vP5Pz_2-j3--o5CwaAZK7o7tMqxxmI1yG0chygARpu6w0BoisYWFNGw&usqp=CAU" 
                alt="Amenazzy logo"
                class="h-8 hover:opacity-90 transition duration-300" />
         </a>
